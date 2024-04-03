@@ -2,17 +2,112 @@ package com.example.librarymanager;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class HelloApplication extends Application {
+    private TableView<Book> tableView = new TableView<>();
+    private static Library lib;
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        VBox mainlayout = new VBox();
+        HBox firstRow = new HBox(8);
+
+        Label labelSearch = new Label("Search :");
+        Label labelSortBy = new Label("Sort by : ");
+
+        TextField textFieldSearch = new TextField();
+
+        ChoiceBox<String> choiceBox = new ChoiceBox<>();
+
+        Book b1 = new Book("Harry Potter and the Philosopher's Stone", "Subtitle 1", new ArrayList<>(List.of("J.K. Rowling")), new ArrayList<>(List.of("Translator 1")), "9781408855652", "Bloomsbury Publishing", "26 June 1997", "First Edition", "Hardcover", "English", 4.5, new ArrayList<>(List.of("Fantasy", "Magic")));
+        Book b2 = new Book("The Hobbit", "Subtitle 2", new ArrayList<>(List.of("J.R.R. Tolkien")), new ArrayList<>(List.of("Translator 2")), "9780547928227", "Houghton Mifflin Harcourt", "21 September 1937", "First Edition", "Paperback", "English", 4.8, new ArrayList<>(List.of("Fantasy")));
+        Book b3 = new Book("Pride and Prejudice", "Subtitle 3", new ArrayList<>(List.of("Jane Austen")), new ArrayList<>(), "9780141199078", "Penguin Books", "28 January 1813", "First Edition", "Paperback", "English", 4.2, new ArrayList<>(List.of("Romance")));
+        ArrayList<Book> arrList = new ArrayList<>();
+
+        arrList.add(b1);
+        arrList.add(b2);
+        arrList.add(b3);
+
+        lib = new Library(arrList);
+
+        TableColumn<Book, String> titleColumn = new TableColumn<>("Title");
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+
+        TableColumn<Book, String> subTitleColumn = new TableColumn<>("Subtitle");
+        subTitleColumn.setCellValueFactory(new PropertyValueFactory<>("subtitle"));
+
+        TableColumn<Book, String[]> authorsColumn = new TableColumn<>("Authors");
+        authorsColumn.setCellValueFactory(new PropertyValueFactory<>("authors"));
+
+        TableColumn<Book, String[]> translatorsColumn = new TableColumn<>("Translators");
+        translatorsColumn.setCellValueFactory(new PropertyValueFactory<>("translators"));
+
+        TableColumn<Book, String> ISBNColumn = new TableColumn<>("ISBN");
+        ISBNColumn.setCellValueFactory(new PropertyValueFactory<>("ISBN"));
+
+        TableColumn<Book, String> publisherColumn = new TableColumn<>("Publisher");
+        publisherColumn.setCellValueFactory(new PropertyValueFactory<>("publisher"));
+
+        TableColumn<Book, String> dateColumn = new TableColumn<>("Date");
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+
+        TableColumn<Book, String> editionColumn = new TableColumn<>("Edition");
+        editionColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
+
+        TableColumn<Book, String> coverColumn = new TableColumn<>("Cover");
+        coverColumn.setCellValueFactory(new PropertyValueFactory<>("cover"));
+
+        TableColumn<Book, String> languageColumn = new TableColumn<>("Language");
+        languageColumn.setCellValueFactory(new PropertyValueFactory<>("language"));
+
+        TableColumn<Book, Double> ratingColumn = new TableColumn<>("Rating");
+        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+
+        TableColumn<Book, String[]> tagsColumn = new TableColumn<>("Tags");
+        tagsColumn.setCellValueFactory(new PropertyValueFactory<>("tags"));
+
+        tableView.getColumns().addAll(titleColumn,subTitleColumn,authorsColumn,translatorsColumn,ISBNColumn,publisherColumn,dateColumn,editionColumn,coverColumn,languageColumn,ratingColumn,tagsColumn);
+        for(Book i : lib.getBookList()){
+            tableView.getItems().add(i);
+        }
+
+        Button buttonSearch = new Button("Search");
+        Button buttonAdd = new Button("Add");
+
+        MenuItem mItemNew = new MenuItem("New");
+        MenuItem mItemImport = new MenuItem("Import");
+        MenuItem mItemExport = new MenuItem("Export");
+        MenuItem mItemAbout = new MenuItem("About");
+
+        Menu mFile = new Menu("File");
+        Menu mAbout = new Menu("Help");
+
+        MenuBar mBar = new MenuBar();
+
+        mAbout.getItems().addAll(mItemAbout);
+        mFile.getItems().addAll(mItemNew,mItemImport,mItemExport);
+        mBar.getMenus().addAll(mFile,mAbout);
+        mainlayout.getChildren().addAll(mBar,firstRow,tableView);
+        firstRow.getChildren().addAll(labelSearch,textFieldSearch,labelSortBy,choiceBox,buttonSearch,buttonAdd);
+
+        HBox.setHgrow(textFieldSearch, Priority.ALWAYS);
+
+        VBox.setMargin(firstRow,new Insets(8));
+
+        Scene scene = new Scene(mainlayout, 800, 400);
+        stage.setTitle("Library Management System");
         stage.setScene(scene);
         stage.show();
     }
