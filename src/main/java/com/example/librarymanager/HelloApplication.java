@@ -3,9 +3,12 @@ package com.example.librarymanager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -41,6 +44,8 @@ public class HelloApplication extends Application {
         arrList.add(b3);
 
         lib = new Library(arrList);
+
+        HBox secondContainer = new HBox();
 
         TableColumn<Book, String> titleColumn = new TableColumn<>("Title");
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -82,6 +87,7 @@ public class HelloApplication extends Application {
         for(Book i : lib.getBookList()){
             tableView.getItems().add(i);
         }
+        HBox.setHgrow(tableView,Priority.ALWAYS);
 
         Button buttonSearch = new Button("Search");
         Button buttonAdd = new Button("Add");
@@ -99,14 +105,48 @@ public class HelloApplication extends Application {
         mAbout.getItems().addAll(mItemAbout);
         mFile.getItems().addAll(mItemNew,mItemImport,mItemExport);
         mBar.getMenus().addAll(mFile,mAbout);
-        mainlayout.getChildren().addAll(mBar,firstRow,tableView);
+
         firstRow.getChildren().addAll(labelSearch,textFieldSearch,labelSortBy,choiceBox,buttonSearch,buttonAdd);
 
         HBox.setHgrow(textFieldSearch, Priority.ALWAYS);
+        VBox popupContentVBox = new VBox();
+        popupContentVBox.setPrefWidth(200);
+        popupContentVBox.setPrefHeight(400);
+        Image image = new Image("img1.jpg");
+        popupContentVBox.setAlignment(Pos.TOP_CENTER);
+        popupContentVBox.setPadding(new Insets(10));
+        popupContentVBox.setMinWidth(200);
+        VBox popupContentInformationVBox = new VBox();
+        popupContentInformationVBox.setAlignment(Pos.CENTER_LEFT);
+
+        HBox popupContentButtonHBox = new HBox();
+        Button button1 = new Button("Button1");
+        Button button2 = new Button("Button2");
+        Button button3 = new Button("Button3");
+
+        popupContentButtonHBox.getChildren().addAll(button1,button2,button3);
+        popupContentButtonHBox.setAlignment(Pos.BOTTOM_CENTER);
+
+        tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            popupContentVBox.getChildren().clear();
+            popupContentInformationVBox.getChildren().clear();
+            // Önceki verileri temizle
+            if (newValue != null) {
+                ImageView imageView = new ImageView(image);
+                imageView.setFitWidth(200);
+                imageView.setFitHeight(150);
+                imageView.setPreserveRatio(true);
+                Label label = new Label("\nTitle: " + newValue.getTitle() + "\nSubititle: " + newValue.getSubtitle()+"\nAuthors: " + newValue.getAuthors().toString() + "\nTranslators: " + newValue.getTranslators().toString()+"\nISBN: " + newValue.getISBN() + "\nPublisher: " + newValue.getPublisher()+ "\nDate: " + newValue.getDate()+ "\nEdition: " + newValue.getEdition()+ "\nCover: " + newValue.getCover()+ "\nLanguage: " + newValue.getLanguage()+ "\nRating: " + newValue.getRating()+ "\nTags: " + newValue.getTags()+"\n\n");
+                popupContentInformationVBox.getChildren().addAll(label,popupContentButtonHBox);
+                popupContentVBox.getChildren().addAll(imageView,popupContentInformationVBox);
+            }
+        });
+        secondContainer.getChildren().addAll(tableView,popupContentVBox);
+        mainlayout.getChildren().addAll(mBar,firstRow,secondContainer);
 
         VBox.setMargin(firstRow,new Insets(8));
 
-        Scene scene = new Scene(mainlayout, 800, 400);
+        Scene scene = new Scene(mainlayout, 1200, 500);
         stage.setTitle("Library Management System");
         stage.setScene(scene);
         stage.show();
