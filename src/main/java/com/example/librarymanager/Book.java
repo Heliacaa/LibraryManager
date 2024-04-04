@@ -15,7 +15,7 @@ public class Book {
     private String language;
     private double rating;
     private ArrayList<String> tags;
-    public static final String[] specs = {"title","subtitle","authors","translator","ISBN","publisher","date","edition","cover","language","rating","tags"};
+    public static final String[] specs = {"title","subtitle","authors","translators","ISBN","publisher","date","edition","cover","language","rating","tags"};
 
     public Book() {
 
@@ -52,9 +52,8 @@ public class Book {
         this.subtitle = subtitle;
     }
 
-    public String getAuthors() {
-        String result = String.join(",",authors);
-        return result;
+    public ArrayList<String> getAuthors() {
+        return authors;
     }
 
     public void setAuthors(String authors) {

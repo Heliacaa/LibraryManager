@@ -12,8 +12,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.List;
 public class HelloApplication extends Application {
     private TableView<Book> tableView = new TableView<>();
     private static Library lib;
+    private FileInputOutput fileInputOutput;
     @Override
     public void start(Stage stage) throws IOException {
         VBox mainlayout = new VBox();
@@ -95,6 +98,21 @@ public class HelloApplication extends Application {
         MenuItem mItemNew = new MenuItem("New");
         MenuItem mItemImport = new MenuItem("Import");
         MenuItem mItemExport = new MenuItem("Export");
+        mItemExport.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json");
+            fileChooser.getExtensionFilters().add(extFilter);
+            File selectedFile = fileChooser.showOpenDialog(stage);
+            if (selectedFile != null) {
+                String filePath = selectedFile.getAbsolutePath();
+                fileInputOutput = new FileInputOutput("fThread",selectedFile,"w", lib.getBookList());
+                System.out.println("Selected file: " + filePath);
+                fileInputOutput.run();
+            } else {
+                System.out.println("File selection canceled.");
+            }
+        });
         MenuItem mItemAbout = new MenuItem("About");
 
         Menu mFile = new Menu("File");
@@ -143,7 +161,7 @@ public class HelloApplication extends Application {
         });
         secondContainer.getChildren().addAll(tableView,popupContentVBox);
         mainlayout.getChildren().addAll(mBar,firstRow,secondContainer);
-
+        VBox.setVgrow(secondContainer,Priority.ALWAYS);
         VBox.setMargin(firstRow,new Insets(8));
 
         Scene scene = new Scene(mainlayout, 1200, 500);
