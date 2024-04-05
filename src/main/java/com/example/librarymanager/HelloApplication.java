@@ -227,9 +227,20 @@ public class HelloApplication extends Application {
             // Retrieve book information from text fields and add to library
             String title = titleField.getText();
             String subtitle = subtitleField.getText();
+            String author = authorField.getText();
+            String ISBN = ISBNField.getText();
+            String publisher = publisherField.getText();
+            String date = dateField.getText();
+            String edition = editionField.getText();
+            String cover = coverField.getText();
+            String language = languageField.getText();
+            String rating = ratingField.getText();
+            Book dene = new Book(title, subtitle, null, null, ISBN, publisher, date, edition, cover, language, 0.0, null);
             // Create Book object and add to library
             // For demonstration, let's assume lib is accessible here
-            lib.getBookList().add(new Book(title, subtitle, null, null, "", "", "", "", "", "", 0.0, null));
+            //lib.getBookList().add(new Book(title, subtitle, null, null, "", "", "", "", "", "", 0.0, null));
+            lib.getBookList().add(dene);
+            tableView.getItems().add(dene);
             // Close the add book window
             addBookStage.close();
         });
