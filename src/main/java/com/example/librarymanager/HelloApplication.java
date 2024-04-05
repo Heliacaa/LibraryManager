@@ -235,12 +235,15 @@ public class HelloApplication extends Application {
             String cover = coverField.getText();
             String language = languageField.getText();
             String rating = ratingField.getText();
-            Book dene = new Book(title, subtitle, null, null, ISBN, publisher, date, edition, cover, language, 0.0, null);
+            Book curr = new Book(title, subtitle, new ArrayList<>(), new ArrayList<>(), ISBN, publisher, date, edition, cover, language, 0.0, new ArrayList<>());
             // Create Book object and add to library
             // For demonstration, let's assume lib is accessible here
             //lib.getBookList().add(new Book(title, subtitle, null, null, "", "", "", "", "", "", 0.0, null));
-            lib.getBookList().add(dene);
-            tableView.getItems().add(dene);
+            lib.getBookList().add(curr);
+            tableView.getItems().clear();
+            for(Book i : lib.getBookList()){
+                tableView.getItems().add(i);
+            }
             // Close the add book window
             addBookStage.close();
         });
