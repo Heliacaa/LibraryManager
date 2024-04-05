@@ -3,6 +3,7 @@ package com.example.librarymanager;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -10,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -198,9 +200,15 @@ public class HelloApplication extends Application {
         addBookStage.initModality(Modality.APPLICATION_MODAL);
 
         // Create layout for add book window
-        VBox addBookLayout = new VBox();
+       /* VBox addBookLayout = new VBox();
         addBookLayout.setAlignment(Pos.CENTER);
         addBookLayout.setSpacing(10);
+        addBookLayout.setPadding(new Insets(20));*/
+
+        GridPane addBookLayout = new GridPane();
+        addBookLayout.setAlignment(Pos.CENTER);
+        addBookLayout.setHgap(10);
+        addBookLayout.setVgap(10);
         addBookLayout.setPadding(new Insets(20));
 
         // Create text fields for book information
@@ -233,12 +241,38 @@ public class HelloApplication extends Application {
         Label tagsLabel = new Label("Tags:");
 
 
+        addBookLayout.add(titleLabel, 0, 0);
+        addBookLayout.add(titleField, 1, 0);
+        addBookLayout.add(subtitleLabel, 2, 0);
+        addBookLayout.add(subtitleField, 3, 0);
+        addBookLayout.add(authorlabel, 0, 1);
+        addBookLayout.add(authorField, 1, 1);
+        addBookLayout.add(translatorlabel, 2, 1);
+        addBookLayout.add(translatorField, 3, 1);
+        addBookLayout.add(ISBNLabel, 0, 2);
+        addBookLayout.add(ISBNField, 1, 2);
+        addBookLayout.add(publisherLabel, 2, 2);
+        addBookLayout.add(publisherField, 3, 2);
+        addBookLayout.add(dateLabel, 0, 3);
+        addBookLayout.add(dateField, 1, 3);
+        addBookLayout.add(editionLabel, 2, 3);
+        addBookLayout.add(editionField, 3, 3);
+        addBookLayout.add(coverLabel, 0, 4);
+        addBookLayout.add(coverField, 1, 4);
+        addBookLayout.add(languageLabel, 2, 4);
+        addBookLayout.add(languageField, 3, 4);
+        addBookLayout.add(ratingLabel, 0, 5);
+        addBookLayout.add(ratingField, 1, 5);
+        addBookLayout.add(tagsLabel, 2, 5);
+        addBookLayout.add(tagsField, 3, 5);
+
+
 
         //"title","subtitle","authors","translators","ISBN","publisher","date","edition","cover","language","rating","tags"
 
         // Add components to layout
-        addBookLayout.getChildren().addAll(titleLabel, titleField, subtitleLabel, subtitleField, authorlabel, authorField, translatorlabel, translatorField, ISBNLabel, ISBNField, publisherLabel, publisherField,
-                dateLabel, dateField, editionLabel, editionField, coverLabel, coverField, languageLabel, languageField, ratingLabel, ratingField, tagsLabel, tagsField);
+        //addBookLayout.getChildren().addAll(titleLabel, titleField, subtitleLabel, subtitleField, authorlabel, authorField, translatorlabel, translatorField, ISBNLabel, ISBNField, publisherLabel, publisherField,
+                //dateLabel, dateField, editionLabel, editionField, coverLabel, coverField, languageLabel, languageField, ratingLabel, ratingField, tagsLabel, tagsField);
 
         // Create button for adding book
         Button addBookButton = new Button("Add");
@@ -268,10 +302,12 @@ public class HelloApplication extends Application {
         });
 
         // Add button to layout
-        addBookLayout.getChildren().add(addBookButton);
+        //addBookLayout.getChildren().add(addBookButton);
+        addBookLayout.add(addBookButton, 1, 6, 3, 1);
+        GridPane.setHalignment(addBookButton, HPos.CENTER);
 
         // Set scene for add book window
-        Scene addBookScene = new Scene(addBookLayout, 400, 800);
+        Scene addBookScene = new Scene(addBookLayout, 600, 300);
         addBookStage.setScene(addBookScene);
         // Show add book window
         addBookStage.show();
