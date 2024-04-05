@@ -1,5 +1,6 @@
 package com.example.librarymanager;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -26,6 +27,10 @@ public class HelloApplication extends Application {
     private TableView<Book> tableView = new TableView<>();
     private static Library lib;
     private FileInputOutput fileInputOutput;
+    private TextField textFieldSearch = new TextField();
+    private ChoiceBox<String> choiceBox = new ChoiceBox<>();
+
+
     @Override
     public void start(Stage stage) throws IOException {
         VBox mainlayout = new VBox();
@@ -34,9 +39,22 @@ public class HelloApplication extends Application {
         Label labelSearch = new Label("Search :");
         Label labelSortBy = new Label("Sort by : ");
 
-        TextField textFieldSearch = new TextField();
 
-        ChoiceBox<String> choiceBox = new ChoiceBox<>();
+        choiceBox.getItems().addAll(
+                "title",
+                "subtitle",
+                "authors",
+                "translators",
+                "ISBN",
+                "publisher",
+                "date",
+                "edition",
+                "cover",
+                "language",
+                "rating",
+                "tags"
+        );
+        choiceBox.setValue("title");
 
         Book b1 = new Book("Harry Potter and the Philosopher's Stone", "Subtitle 1", new ArrayList<>(List.of("J.K. Rowling")), new ArrayList<>(List.of("Translator 1")), "9781408855652", "Bloomsbury Publishing", "26 June 1997", "First Edition", "Hardcover", "English", 4.5, new ArrayList<>(List.of("Fantasy", "Magic")));
         Book b2 = new Book("The Hobbit", "Subtitle 2", new ArrayList<>(List.of("J.R.R. Tolkien")), new ArrayList<>(List.of("Translator 2")), "9780547928227", "Houghton Mifflin Harcourt", "21 September 1937", "First Edition", "Paperback", "English", 4.8, new ArrayList<>(List.of("Fantasy")));
@@ -94,6 +112,7 @@ public class HelloApplication extends Application {
         HBox.setHgrow(tableView,Priority.ALWAYS);
 
         Button buttonSearch = new Button("Search");
+        buttonSearch.setOnAction(e->search());
         Button buttonAdd = new Button("Add");
 
         MenuItem mItemNew = new MenuItem("New");
@@ -257,7 +276,112 @@ public class HelloApplication extends Application {
         // Show add book window
         addBookStage.show();
     }
+    public void search(){
+        if(textFieldSearch.getText().isBlank()){
+            return;
+        }
+        else{
+            String txtInfoVal = textFieldSearch.getText();
+            tableView.getItems().clear();
+            switch(choiceBox.getValue()){
+                case "title":
+                    for(Book i : lib.getBookList()){
+                        if(i.getTitle().equalsIgnoreCase(txtInfoVal)){
+                            tableView.getItems().add(i);
+                        }
+                    }
+                    break;
+                case "subtitle":
+                    for(Book i : lib.getBookList()){
+                        if(i.getSubtitle().equalsIgnoreCase(txtInfoVal)){
+                            tableView.getItems().add(i);
+                        }
+                    }
+                    break;
+                case "authors":
+                    for(Book i : lib.getBookList()){
+                        for(String curr : i.getAuthors()){
+                            if(curr.equalsIgnoreCase(txtInfoVal)){
+                                tableView.getItems().add(i);
+                            }
+                        }
+                    }
+                    break;
+                case "translators":
+                    for(Book i : lib.getBookList()){
+                        for(String curr : i.getTranslators()){
+                            if(curr.equalsIgnoreCase(txtInfoVal)){
+                                tableView.getItems().add(i);
+                            }
+                        }
+                    }
 
+                    break;
+                case "ISBN":
+                    for(Book i : lib.getBookList()){
+                        if(i.getISBN().equalsIgnoreCase(txtInfoVal)){
+                            tableView.getItems().add(i);
+                        }
+                    }
+
+                    break;
+                case "publisher":
+                    for(Book i : lib.getBookList()){
+                        if(i.getPublisher().equalsIgnoreCase(txtInfoVal)){
+                            tableView.getItems().add(i);
+                        }
+                    }
+
+                    break;
+                case "date":
+                    for(Book i : lib.getBookList()){
+                        if(i.getDate().equalsIgnoreCase(txtInfoVal)){
+                            tableView.getItems().add(i);
+                        }
+                    }
+
+                    break;
+                case "edition":
+                    for(Book i : lib.getBookList()){
+                        if(i.getEdition().equalsIgnoreCase(txtInfoVal)){
+                            tableView.getItems().add(i);
+                        }
+                    }
+                    break;
+                case "cover":
+                    for(Book i : lib.getBookList()){
+                        if(i.getCover().equalsIgnoreCase(txtInfoVal)){
+                            tableView.getItems().add(i);
+                        }
+                    }
+                    break;
+                case "language":
+                    for(Book i : lib.getBookList()){
+                        if(i.getLanguage().equalsIgnoreCase(txtInfoVal)){
+                            tableView.getItems().add(i);
+                        }
+                    }
+                    break;
+                case "rating":
+                    for(Book i : lib.getBookList()){
+                        if(i.getRating()==Double.parseDouble(txtInfoVal)){
+                            tableView.getItems().add(i);
+                        }
+                    }
+                    break;
+                case "tags":
+                    for(Book i : lib.getBookList()){
+                        for(String curr : i.getTags()){
+                            if(curr.equalsIgnoreCase(txtInfoVal)){
+                                tableView.getItems().add(i);
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+
+    }
     public static void main(String[] args) {
         launch();
     }

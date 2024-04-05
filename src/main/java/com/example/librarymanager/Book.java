@@ -60,9 +60,8 @@ public class Book {
         this.authors=(ArrayList<String>) Arrays.asList(authors.split(","));
     }
 
-    public String getTranslators() {
-        String result = String.join(",",translators);
-        return result;
+    public ArrayList<String> getTranslators() {
+        return translators;
     }
 
     public void setTranslators(String translators) {
@@ -125,9 +124,8 @@ public class Book {
         this.rating = Double.parseDouble(rating);
     }
 
-    public String getTags() {
-        String result = String.join(",",tags);
-        return result;
+    public ArrayList<String> getTags() {
+        return tags;
     }
 
     public void setTags(String tags) {
