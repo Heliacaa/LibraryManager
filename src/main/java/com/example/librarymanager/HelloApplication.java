@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -163,11 +164,84 @@ public class HelloApplication extends Application {
         mainlayout.getChildren().addAll(mBar,firstRow,secondContainer);
         VBox.setVgrow(secondContainer,Priority.ALWAYS);
         VBox.setMargin(firstRow,new Insets(8));
+        buttonAdd.setOnAction(e->openAddBookWindow());
 
         Scene scene = new Scene(mainlayout, 1200, 500);
         stage.setTitle("Library Management System");
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void openAddBookWindow() {
+        // Create a new stage for the add book window
+        Stage addBookStage = new Stage();
+        addBookStage.setTitle("Add Book");
+        addBookStage.initModality(Modality.APPLICATION_MODAL);
+
+        // Create layout for add book window
+        VBox addBookLayout = new VBox();
+        addBookLayout.setAlignment(Pos.CENTER);
+        addBookLayout.setSpacing(10);
+        addBookLayout.setPadding(new Insets(20));
+
+        // Create text fields for book information
+        TextField titleField = new TextField();
+        TextField subtitleField = new TextField();
+        TextField authorField = new TextField();
+        TextField translatorField = new TextField();
+        TextField ISBNField = new TextField();
+        TextField publisherField = new TextField();
+        TextField dateField = new TextField();
+        TextField editionField = new TextField();
+        TextField coverField = new TextField();
+        TextField languageField = new TextField();
+        TextField ratingField = new TextField();
+        TextField tagsField = new TextField();
+
+
+        // Create labels for text fields
+        Label titleLabel = new Label("Title:");
+        Label subtitleLabel = new Label("Subtitle:");
+        Label authorlabel = new Label("Author:");
+        Label translatorlabel = new Label("Translator:");
+        Label ISBNLabel = new Label("ISBN:");
+        Label publisherLabel = new Label("Publisher:");
+        Label dateLabel = new Label("Date:");
+        Label editionLabel = new Label("Edition:");
+        Label coverLabel = new Label("Cover:");
+        Label languageLabel = new Label("Language:");
+        Label ratingLabel = new Label("Rating:");
+        Label tagsLabel = new Label("Tags:");
+
+
+
+        //"title","subtitle","authors","translators","ISBN","publisher","date","edition","cover","language","rating","tags"
+
+        // Add components to layout
+        addBookLayout.getChildren().addAll(titleLabel, titleField, subtitleLabel, subtitleField, authorlabel, authorField, translatorlabel, translatorField, ISBNLabel, ISBNField, publisherLabel, publisherField,
+                dateLabel, dateField, editionLabel, editionField, coverLabel, coverField, languageLabel, languageField, ratingLabel, ratingField, tagsLabel, tagsField);
+
+        // Create button for adding book
+        Button addBookButton = new Button("Add");
+        addBookButton.setOnAction(e -> {
+            // Retrieve book information from text fields and add to library
+            String title = titleField.getText();
+            String subtitle = subtitleField.getText();
+            // Create Book object and add to library
+            // For demonstration, let's assume lib is accessible here
+            lib.getBookList().add(new Book(title, subtitle, null, null, "", "", "", "", "", "", 0.0, null));
+            // Close the add book window
+            addBookStage.close();
+        });
+
+        // Add button to layout
+        addBookLayout.getChildren().add(addBookButton);
+
+        // Set scene for add book window
+        Scene addBookScene = new Scene(addBookLayout, 400, 800);
+        addBookStage.setScene(addBookScene);
+        // Show add book window
+        addBookStage.show();
     }
 
     public static void main(String[] args) {
