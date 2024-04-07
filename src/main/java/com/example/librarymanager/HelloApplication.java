@@ -333,9 +333,11 @@ public class HelloApplication extends Application {
             String cover = coverField.getText();
             String language = languageField.getText();
             String rating = ratingField.getText();
-            String imgFilePath = null;
+            String imgFilePath = "noPic.jpg";
             try {
-                imgFilePath = selectedFile[0].toURI().toURL().toString();
+                if(selectedFile[0]!=null){
+                    imgFilePath=selectedFile[0].toURI().toURL().toString();
+                }
             } catch (MalformedURLException ex) {
                 throw new RuntimeException(ex);
             }

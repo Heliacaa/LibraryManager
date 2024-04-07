@@ -36,7 +36,7 @@ public class Book {
         this.language = language;
         this.rating = rating;
         this.tags = tags;
-        this.imgFilePath=imgFilePath;
+        setImgFilePath(imgFilePath);
     }
 
     public String getTitle() {
@@ -140,6 +140,9 @@ public class Book {
     }
 
     public void setImgFilePath(String imgFilePath) {
+        if(imgFilePath.equals(null)){
+            this.imgFilePath="noPic.jpg";
+        }
         this.imgFilePath = imgFilePath;
     }
 
