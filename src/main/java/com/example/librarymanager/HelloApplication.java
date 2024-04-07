@@ -119,6 +119,7 @@ public class HelloApplication extends Application {
         Button buttonAdd = new Button("Add");
 
         MenuItem mItemNew = new MenuItem("New");
+        mItemNew.setOnAction(e->newLib());
         MenuItem mItemImport = new MenuItem("Import");
         MenuItem mItemExport = new MenuItem("Export");
         mItemExport.setOnAction(e -> {
@@ -241,7 +242,7 @@ public class HelloApplication extends Application {
         Label languageLabel = new Label("Language:");
         Label ratingLabel = new Label("Rating:");
         Label tagsLabel = new Label("Tags:");
-        final Label[] filePath = {new Label("Image :")};
+        Label filePath = new Label("Image :");
 
 
         addBookLayout.add(titleLabel, 0, 0);
@@ -268,7 +269,7 @@ public class HelloApplication extends Application {
         addBookLayout.add(ratingField, 1, 5);
         addBookLayout.add(tagsLabel, 2, 5);
         addBookLayout.add(tagsField, 3, 5);
-        addBookLayout.add(filePath[0],0,6);
+        addBookLayout.add(filePath,0,6);
 
 
 
@@ -447,6 +448,11 @@ public class HelloApplication extends Application {
             }
         }
 
+    }
+    public void newLib(){
+        lib = new Library();
+        tableView.getItems().clear();
+        return;
     }
     public static void main(String[] args) {
         launch();
