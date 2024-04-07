@@ -369,14 +369,14 @@ public class HelloApplication extends Application {
             switch(choiceBox.getValue()){
                 case "title":
                     for(Book i : lib.getBookList()){
-                        if(i.getTitle().equalsIgnoreCase(txtInfoVal)||i.getTitle().contains(txtInfoVal)){
+                        if(i.getTitle().equalsIgnoreCase(txtInfoVal)||i.getTitle().toLowerCase().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
                     break;
                 case "subtitle":
                     for(Book i : lib.getBookList()){
-                        if(i.getSubtitle().equalsIgnoreCase(txtInfoVal)||i.getSubtitle().contains(txtInfoVal)){
+                        if(i.getSubtitle().equalsIgnoreCase(txtInfoVal)||i.getSubtitle().toLowerCase().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
@@ -384,7 +384,7 @@ public class HelloApplication extends Application {
                 case "authors":
                     for(Book i : lib.getBookList()){
                         for(String curr : i.getAuthors()){
-                            if(curr.equalsIgnoreCase(txtInfoVal)||curr.contains(txtInfoVal)){
+                            if(curr.equalsIgnoreCase(txtInfoVal)||curr.toLowerCase().contains(txtInfoVal)){
                                 tableView.getItems().add(i);
                             }
                         }
@@ -393,7 +393,7 @@ public class HelloApplication extends Application {
                 case "translators":
                     for(Book i : lib.getBookList()){
                         for(String curr : i.getTranslators()){
-                            if(curr.equalsIgnoreCase(txtInfoVal)||curr.contains(txtInfoVal)){
+                            if(curr.equalsIgnoreCase(txtInfoVal)||curr.toLowerCase().contains(txtInfoVal)){
                                 tableView.getItems().add(i);
                             }
                         }
@@ -402,7 +402,7 @@ public class HelloApplication extends Application {
                     break;
                 case "ISBN":
                     for(Book i : lib.getBookList()){
-                        if(i.getISBN().equalsIgnoreCase(txtInfoVal)||i.getISBN().contains(txtInfoVal)){
+                        if(i.getISBN().equalsIgnoreCase(txtInfoVal)||i.getISBN().toLowerCase().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
@@ -410,7 +410,7 @@ public class HelloApplication extends Application {
                     break;
                 case "publisher":
                     for(Book i : lib.getBookList()){
-                        if(i.getPublisher().equalsIgnoreCase(txtInfoVal)||i.getPublisher().contains(txtInfoVal)){
+                        if(i.getPublisher().equalsIgnoreCase(txtInfoVal)||i.getPublisher().toLowerCase().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
@@ -418,7 +418,7 @@ public class HelloApplication extends Application {
                     break;
                 case "date":
                     for(Book i : lib.getBookList()){
-                        if(i.getDate().equalsIgnoreCase(txtInfoVal)||i.getDate().contains(txtInfoVal)){
+                        if(i.getDate().equalsIgnoreCase(txtInfoVal)||i.getDate().toLowerCase().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
@@ -426,21 +426,21 @@ public class HelloApplication extends Application {
                     break;
                 case "edition":
                     for(Book i : lib.getBookList()){
-                        if(i.getEdition().equalsIgnoreCase(txtInfoVal)||i.getEdition().contains(txtInfoVal)){
+                        if(i.getEdition().equalsIgnoreCase(txtInfoVal)||i.getEdition().toLowerCase().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
                     break;
                 case "cover":
                     for(Book i : lib.getBookList()){
-                        if(i.getCover().equalsIgnoreCase(txtInfoVal)||i.getCover().contains(txtInfoVal)){
+                        if(i.getCover().equalsIgnoreCase(txtInfoVal)||i.getCover().toLowerCase().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
                     break;
                 case "language":
                     for(Book i : lib.getBookList()){
-                        if(i.getLanguage().equalsIgnoreCase(txtInfoVal)||i.getLanguage().contains(txtInfoVal)){
+                        if(i.getLanguage().equalsIgnoreCase(txtInfoVal)||i.getLanguage().toLowerCase().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
@@ -455,7 +455,7 @@ public class HelloApplication extends Application {
                 case "tags":
                     for(Book i : lib.getBookList()){
                         for(String curr : i.getTags()){
-                            if(curr.equalsIgnoreCase(txtInfoVal)||curr.contains(txtInfoVal)){
+                            if(curr.equalsIgnoreCase(txtInfoVal)||curr.toLowerCase().contains(txtInfoVal)){
                                 tableView.getItems().add(i);
                             }
                         }
