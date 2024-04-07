@@ -2,6 +2,9 @@ package com.example.librarymanager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.InputMismatchException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Book {
     private String title;
@@ -18,6 +21,7 @@ public class Book {
     private ArrayList<String> tags;
     private String imgFilePath;
     public static final String[] specs = {"title","subtitle","authors","translators","ISBN","publisher","date","edition","cover","language","rating","tags","imgFilePath"};
+    private Validation validator = new Validation();
 
     public Book() {
 
@@ -36,6 +40,21 @@ public class Book {
         this.language = language;
         this.rating = rating;
         this.tags = tags;
+        setImgFilePath(imgFilePath);
+    }
+    public Book(String title, String subtitle, String authors, String translators, String ISBN, String publisher, String date, String edition, String cover, String language, String rating, String tags,String imgFilePath) {
+        setTitle(title);
+        setSubtitle(subtitle);
+        setAuthors(authors);
+        setTranslators(translators);
+        setISBN(ISBN);
+        setPublisher(publisher);
+        setDate(date);
+        setEdition(edition);
+        setCover(cover);
+        setLanguage(language);
+        setRating(rating);
+        setTags(tags);
         setImgFilePath(imgFilePath);
     }
 
@@ -60,7 +79,12 @@ public class Book {
     }
 
     public void setAuthors(String authors) {
-        this.authors=(ArrayList<String>) Arrays.asList(authors.split(","));
+        try{
+            String[] authorArray = authors.split(",");
+            this.authors = new ArrayList<>(Arrays.asList(authorArray));
+        }catch(Exception e){
+            throw new InputMismatchException("Authorlar virgül ile ayrılarak yazılmalı.");
+        }
     }
 
     public ArrayList<String> getTranslators() {
@@ -68,7 +92,12 @@ public class Book {
     }
 
     public void setTranslators(String translators) {
-        this.translators=(ArrayList<String>) Arrays.asList(translators.split(","));
+        try{
+            String[] translatorArray = translators.split(",");
+            this.translators = new ArrayList<>(Arrays.asList(translatorArray));
+        }catch(Exception e){
+            throw new InputMismatchException("Translatorlar virgül ile ayrılarak yazılmalı.");
+        }
     }
 
     public String getISBN() {
@@ -123,16 +152,29 @@ public class Book {
         return rating;
     }
 
-    public void setRating(String rating) {
-        this.rating = Double.parseDouble(rating);
+    public void setRating(String rating) throws NumberFormatException {
+        try {
+            double parsedRating = Double.parseDouble(rating);
+            this.rating=parsedRating;
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Rating için double bir değer giriniz.");
+        }
     }
 
     public ArrayList<String> getTags() {
         return tags;
     }
 
-    public void setTags(String tags) {
-        this.tags=(ArrayList<String>) Arrays.asList(tags.split(","));
+    public void setTags(String tags) throws InputMismatchException{
+//        if (tags == null || tags.isBlank()) {
+//            throw new InputMismatchException("Etiketler boş olamaz.");
+//        }
+        try{
+            String[] tagArray = tags.split(",");
+            this.tags = new ArrayList<>(Arrays.asList(tagArray));
+        }catch(Exception e){
+            throw new InputMismatchException("Tagler virgül ile ayrılarak yazılmalı.");
+        }
     }
 
     public String getImgFilePath() {

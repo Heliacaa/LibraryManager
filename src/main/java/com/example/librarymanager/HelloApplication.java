@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.List;
 
 
@@ -319,6 +320,7 @@ public class HelloApplication extends Application {
             String title = titleField.getText();
             String subtitle = subtitleField.getText();
             String author = authorField.getText();
+            String translator = translatorField.getText();
             String ISBN = ISBNField.getText();
             String publisher = publisherField.getText();
             String date = dateField.getText();
@@ -326,6 +328,7 @@ public class HelloApplication extends Application {
             String cover = coverField.getText();
             String language = languageField.getText();
             String rating = ratingField.getText();
+            String tags = tagsField.getText();
             String imgFilePath = "noPic.jpg";
             try {
                 if(selectedFile[0]!=null){
@@ -334,11 +337,16 @@ public class HelloApplication extends Application {
             } catch (MalformedURLException ex) {
                 throw new RuntimeException(ex);
             }
-            Book curr = new Book(title, subtitle, new ArrayList<>(), new ArrayList<>(), ISBN, publisher, date, edition, cover, language, 0.0, new ArrayList<>(),imgFilePath);
-            // Create Book object and add to library
-            // For demonstration, let's assume lib is accessible here
-            //lib.getBookList().add(new Book(title, subtitle, null, null, "", "", "", "", "", "", 0.0, null));
-            lib.getBookList().add(curr);
+
+            try{
+               Book curr = new Book(title, subtitle,author,translator, ISBN, publisher, date, edition, cover, language, rating,tags,imgFilePath);
+               lib.getBookList().add(curr);
+            }catch (InputMismatchException inputMismatchException){
+                showAlert("Warning","Warning",inputMismatchException.getMessage());
+            }catch(NumberFormatException numberFormatException){
+                showAlert("Warning","Warning",numberFormatException.getMessage());
+            }
+
             tableView.getItems().clear();
             for(Book i : lib.getBookList()){
                 tableView.getItems().add(i);
@@ -567,22 +575,25 @@ public class HelloApplication extends Application {
         // Create button for saving edited book
         Button saveButton = new Button("Save");
         saveButton.setOnAction(e -> {
+            try{
+                bookToEdit.setTitle(titleField.getText());
+                bookToEdit.setSubtitle(subtitleField.getText());
+                bookToEdit.setAuthors(authorField.getText());
+                bookToEdit.setTranslators(translatorField.getText());
+                bookToEdit.setISBN(ISBNField.getText());
+                bookToEdit.setPublisher(publisherField.getText());
+                bookToEdit.setDate(dateField.getText());
+                bookToEdit.setEdition(editionField.getText());
+                bookToEdit.setCover(coverField.getText());
+                bookToEdit.setLanguage(languageField.getText());
+                bookToEdit.setRating(ratingField.getText());
+                bookToEdit.setTags(tagsField.getText());
+            }catch (InputMismatchException inputMismatchException){
+                showAlert("Warning","Warning",inputMismatchException.getMessage());
+            }catch(NumberFormatException numberFormatException){
+                showAlert("Warning","Warning",numberFormatException.getMessage());
+            }
             // Update book information with edited values
-            bookToEdit.setTitle(titleField.getText());
-            bookToEdit.setSubtitle(subtitleField.getText());
-            //bookToEdit.setAuthors(authorField.getText());
-            //bookToEdit.setTranslators(translatorField.getText());
-            bookToEdit.setISBN(ISBNField.getText());
-            bookToEdit.setPublisher(publisherField.getText());
-            bookToEdit.setDate(dateField.getText());
-            bookToEdit.setEdition(editionField.getText());
-            bookToEdit.setCover(coverField.getText());
-            bookToEdit.setLanguage(languageField.getText());
-            bookToEdit.setRating(ratingField.getText());
-            //bookToEdit.setTags(tagsField.getText());
-            //List<String> tags = Arrays.asList(tagsField.getText().split(",\\s*")); // Split tags by comma and trim spaces
-
-
 
             tableView.getItems().clear();
             for(Book i : lib.getBookList()){
@@ -607,6 +618,13 @@ public class HelloApplication extends Application {
 
     public void deleteBook(){
 
+    }
+    private void showAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
     public static void main(String[] args) {
         launch();
