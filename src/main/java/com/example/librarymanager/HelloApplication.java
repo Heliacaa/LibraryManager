@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,9 +59,9 @@ public class HelloApplication extends Application {
         );
         choiceBox.setValue("title");
 
-        Book b1 = new Book("Harry Potter and the Philosopher's Stone", "Subtitle 1", new ArrayList<>(List.of("J.K. Rowling")), new ArrayList<>(List.of("Translator 1")), "9781408855652", "Bloomsbury Publishing", "26 June 1997", "First Edition", "Hardcover", "English", 4.5, new ArrayList<>(List.of("Fantasy", "Magic")));
-        Book b2 = new Book("The Hobbit", "Subtitle 2", new ArrayList<>(List.of("J.R.R. Tolkien")), new ArrayList<>(List.of("Translator 2")), "9780547928227", "Houghton Mifflin Harcourt", "21 September 1937", "First Edition", "Paperback", "English", 4.8, new ArrayList<>(List.of("Fantasy")));
-        Book b3 = new Book("Pride and Prejudice", "Subtitle 3", new ArrayList<>(List.of("Jane Austen")), new ArrayList<>(), "9780141199078", "Penguin Books", "28 January 1813", "First Edition", "Paperback", "English", 4.2, new ArrayList<>(List.of("Romance")));
+        Book b1 = new Book("Harry Potter and the Philosopher's Stone", "Subtitle 1", new ArrayList<>(List.of("J.K. Rowling")), new ArrayList<>(List.of("Translator 1")), "9781408855652", "Bloomsbury Publishing", "26 June 1997", "First Edition", "Hardcover", "English", 4.5, new ArrayList<>(List.of("Fantasy", "Magic")),"./img1.jpg");
+        Book b2 = new Book("The Hobbit", "Subtitle 2", new ArrayList<>(List.of("J.R.R. Tolkien")), new ArrayList<>(List.of("Translator 2")), "9780547928227", "Houghton Mifflin Harcourt", "21 September 1937", "First Edition", "Paperback", "English", 4.8, new ArrayList<>(List.of("Fantasy")),"./img1.jpg");
+        Book b3 = new Book("Pride and Prejudice", "Subtitle 3", new ArrayList<>(List.of("Jane Austen")), new ArrayList<>(), "9780141199078", "Penguin Books", "28 January 1813", "First Edition", "Paperback", "English", 4.2, new ArrayList<>(List.of("Romance")),"./img1.jpg");
         ArrayList<Book> arrList = new ArrayList<>();
 
         arrList.add(b1);
@@ -152,7 +153,7 @@ public class HelloApplication extends Application {
         VBox popupContentVBox = new VBox();
         popupContentVBox.setPrefWidth(200);
         popupContentVBox.setPrefHeight(400);
-        Image image = new Image("img1.jpg");
+
         popupContentVBox.setAlignment(Pos.TOP_CENTER);
         popupContentVBox.setPadding(new Insets(10));
         popupContentVBox.setMinWidth(200);
@@ -172,6 +173,7 @@ public class HelloApplication extends Application {
             popupContentInformationVBox.getChildren().clear();
             // Önceki verileri temizle
             if (newValue != null) {
+                Image image = new Image(newValue.getImgFilePath());
                 ImageView imageView = new ImageView(image);
                 imageView.setFitWidth(200);
                 imageView.setFitHeight(150);
@@ -239,6 +241,7 @@ public class HelloApplication extends Application {
         Label languageLabel = new Label("Language:");
         Label ratingLabel = new Label("Rating:");
         Label tagsLabel = new Label("Tags:");
+        final Label[] filePath = {new Label("Image :")};
 
 
         addBookLayout.add(titleLabel, 0, 0);
@@ -265,6 +268,7 @@ public class HelloApplication extends Application {
         addBookLayout.add(ratingField, 1, 5);
         addBookLayout.add(tagsLabel, 2, 5);
         addBookLayout.add(tagsField, 3, 5);
+        addBookLayout.add(filePath[0],0,6);
 
 
 
@@ -273,6 +277,25 @@ public class HelloApplication extends Application {
         // Add components to layout
         //addBookLayout.getChildren().addAll(titleLabel, titleField, subtitleLabel, subtitleField, authorlabel, authorField, translatorlabel, translatorField, ISBNLabel, ISBNField, publisherLabel, publisherField,
                 //dateLabel, dateField, editionLabel, editionField, coverLabel, coverField, languageLabel, languageField, ratingLabel, ratingField, tagsLabel, tagsField);
+
+        Button addImgButton = new Button("Add Image");
+
+        FileChooser fileChooser = new FileChooser();
+
+        // Sadece PNG ve JPEG uzantılı dosyaları filtreleme
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg");
+        fileChooser.getExtensionFilters().add(filter);
+
+        final File[] selectedFile = new File[1];
+        // Butona tıklandığında dosya seçiciyi açma
+        addImgButton.setOnAction(e -> {
+            selectedFile[0] = fileChooser.showOpenDialog(addBookStage);
+            if (selectedFile[0] != null) {
+
+            } else {
+                System.out.println("File selection canceled.");
+            }
+        });
 
         // Create button for adding book
         Button addBookButton = new Button("Add");
@@ -288,7 +311,13 @@ public class HelloApplication extends Application {
             String cover = coverField.getText();
             String language = languageField.getText();
             String rating = ratingField.getText();
-            Book curr = new Book(title, subtitle, new ArrayList<>(), new ArrayList<>(), ISBN, publisher, date, edition, cover, language, 0.0, new ArrayList<>());
+            String imgFilePath = null;
+            try {
+                imgFilePath = selectedFile[0].toURI().toURL().toString();
+            } catch (MalformedURLException ex) {
+                throw new RuntimeException(ex);
+            }
+            Book curr = new Book(title, subtitle, new ArrayList<>(), new ArrayList<>(), ISBN, publisher, date, edition, cover, language, 0.0, new ArrayList<>(),imgFilePath);
             // Create Book object and add to library
             // For demonstration, let's assume lib is accessible here
             //lib.getBookList().add(new Book(title, subtitle, null, null, "", "", "", "", "", "", 0.0, null));
@@ -304,6 +333,7 @@ public class HelloApplication extends Application {
         // Add button to layout
         //addBookLayout.getChildren().add(addBookButton);
         addBookLayout.add(addBookButton, 1, 6, 3, 1);
+        addBookLayout.add(addImgButton,1,6);
         GridPane.setHalignment(addBookButton, HPos.CENTER);
 
         // Set scene for add book window
@@ -322,14 +352,14 @@ public class HelloApplication extends Application {
             switch(choiceBox.getValue()){
                 case "title":
                     for(Book i : lib.getBookList()){
-                        if(i.getTitle().equalsIgnoreCase(txtInfoVal)){
+                        if(i.getTitle().equalsIgnoreCase(txtInfoVal)||i.getTitle().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
                     break;
                 case "subtitle":
                     for(Book i : lib.getBookList()){
-                        if(i.getSubtitle().equalsIgnoreCase(txtInfoVal)){
+                        if(i.getSubtitle().equalsIgnoreCase(txtInfoVal)||i.getSubtitle().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
@@ -337,7 +367,7 @@ public class HelloApplication extends Application {
                 case "authors":
                     for(Book i : lib.getBookList()){
                         for(String curr : i.getAuthors()){
-                            if(curr.equalsIgnoreCase(txtInfoVal)){
+                            if(curr.equalsIgnoreCase(txtInfoVal)||curr.contains(txtInfoVal)){
                                 tableView.getItems().add(i);
                             }
                         }
@@ -346,7 +376,7 @@ public class HelloApplication extends Application {
                 case "translators":
                     for(Book i : lib.getBookList()){
                         for(String curr : i.getTranslators()){
-                            if(curr.equalsIgnoreCase(txtInfoVal)){
+                            if(curr.equalsIgnoreCase(txtInfoVal)||curr.contains(txtInfoVal)){
                                 tableView.getItems().add(i);
                             }
                         }
@@ -355,7 +385,7 @@ public class HelloApplication extends Application {
                     break;
                 case "ISBN":
                     for(Book i : lib.getBookList()){
-                        if(i.getISBN().equalsIgnoreCase(txtInfoVal)){
+                        if(i.getISBN().equalsIgnoreCase(txtInfoVal)||i.getISBN().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
@@ -363,7 +393,7 @@ public class HelloApplication extends Application {
                     break;
                 case "publisher":
                     for(Book i : lib.getBookList()){
-                        if(i.getPublisher().equalsIgnoreCase(txtInfoVal)){
+                        if(i.getPublisher().equalsIgnoreCase(txtInfoVal)||i.getPublisher().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
@@ -371,7 +401,7 @@ public class HelloApplication extends Application {
                     break;
                 case "date":
                     for(Book i : lib.getBookList()){
-                        if(i.getDate().equalsIgnoreCase(txtInfoVal)){
+                        if(i.getDate().equalsIgnoreCase(txtInfoVal)||i.getDate().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
@@ -379,21 +409,21 @@ public class HelloApplication extends Application {
                     break;
                 case "edition":
                     for(Book i : lib.getBookList()){
-                        if(i.getEdition().equalsIgnoreCase(txtInfoVal)){
+                        if(i.getEdition().equalsIgnoreCase(txtInfoVal)||i.getEdition().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
                     break;
                 case "cover":
                     for(Book i : lib.getBookList()){
-                        if(i.getCover().equalsIgnoreCase(txtInfoVal)){
+                        if(i.getCover().equalsIgnoreCase(txtInfoVal)||i.getCover().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
                     break;
                 case "language":
                     for(Book i : lib.getBookList()){
-                        if(i.getLanguage().equalsIgnoreCase(txtInfoVal)){
+                        if(i.getLanguage().equalsIgnoreCase(txtInfoVal)||i.getLanguage().contains(txtInfoVal)){
                             tableView.getItems().add(i);
                         }
                     }
@@ -408,7 +438,7 @@ public class HelloApplication extends Application {
                 case "tags":
                     for(Book i : lib.getBookList()){
                         for(String curr : i.getTags()){
-                            if(curr.equalsIgnoreCase(txtInfoVal)){
+                            if(curr.equalsIgnoreCase(txtInfoVal)||curr.contains(txtInfoVal)){
                                 tableView.getItems().add(i);
                             }
                         }

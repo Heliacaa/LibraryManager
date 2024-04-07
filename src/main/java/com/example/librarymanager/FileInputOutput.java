@@ -88,6 +88,9 @@ public class FileInputOutput{
                             }
                             book.put(a,arrNodeTags);
                             break;
+                        case "imgFilePath":
+                            book.put(a,currBook.getImgFilePath());
+                            break;
                     }
                 }
                 books.add(book);

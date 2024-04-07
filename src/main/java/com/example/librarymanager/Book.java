@@ -1,4 +1,5 @@
 package com.example.librarymanager;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -15,13 +16,14 @@ public class Book {
     private String language;
     private double rating;
     private ArrayList<String> tags;
-    public static final String[] specs = {"title","subtitle","authors","translators","ISBN","publisher","date","edition","cover","language","rating","tags"};
+    private String imgFilePath;
+    public static final String[] specs = {"title","subtitle","authors","translators","ISBN","publisher","date","edition","cover","language","rating","tags","imgFilePath"};
 
     public Book() {
 
     }
 
-    public Book(String title, String subtitle, ArrayList<String> authors, ArrayList<String> translators, String ISBN, String publisher, String date, String edition, String cover, String language, double rating, ArrayList<String> tags) {
+    public Book(String title, String subtitle, ArrayList<String> authors, ArrayList<String> translators, String ISBN, String publisher, String date, String edition, String cover, String language, double rating, ArrayList<String> tags,String imgFilePath) {
         this.title = title;
         this.subtitle = subtitle;
         this.authors = authors;
@@ -34,6 +36,7 @@ public class Book {
         this.language = language;
         this.rating = rating;
         this.tags = tags;
+        this.imgFilePath=imgFilePath;
     }
 
     public String getTitle() {
@@ -130,6 +133,14 @@ public class Book {
 
     public void setTags(String tags) {
         this.tags=(ArrayList<String>) Arrays.asList(tags.split(","));
+    }
+
+    public String getImgFilePath() {
+        return imgFilePath;
+    }
+
+    public void setImgFilePath(String imgFilePath) {
+        this.imgFilePath = imgFilePath;
     }
 
     @Override
