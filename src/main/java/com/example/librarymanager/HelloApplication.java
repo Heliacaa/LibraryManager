@@ -2,6 +2,7 @@ package com.example.librarymanager;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -161,12 +162,12 @@ public class HelloApplication extends Application {
         VBox popupContentInformationVBox = new VBox();
         popupContentInformationVBox.setAlignment(Pos.CENTER_LEFT);
 
-        HBox popupContentButtonHBox = new HBox();
-        Button button1 = new Button("Button1");
-        Button button2 = new Button("Button2");
-        Button button3 = new Button("Button3");
+        HBox popupContentButtonHBox = new HBox(8);
+        Button buttonEdit = new Button("Edit");
+        Button buttonDelete = new Button("Delete");
+        //Button button3 = new Button("Button3");
 
-        popupContentButtonHBox.getChildren().addAll(button1,button2,button3);
+        popupContentButtonHBox.getChildren().addAll(buttonEdit,buttonDelete);
         popupContentButtonHBox.setAlignment(Pos.BOTTOM_CENTER);
 
         tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -183,6 +184,15 @@ public class HelloApplication extends Application {
                 popupContentInformationVBox.getChildren().addAll(label,popupContentButtonHBox);
                 popupContentVBox.getChildren().addAll(imageView,popupContentInformationVBox);
             }
+            buttonDelete.setOnAction(e->{
+                lib.getBookList().remove(newValue);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText(newValue.getTitle()+" "+" was successfully deleted.");
+                alert.initOwner(stage);
+                alert.showAndWait();
+                tableView.getItems().clear();
+                tableView.getItems().addAll(lib.getBookList());
+            });
         });
         secondContainer.getChildren().addAll(tableView,popupContentVBox);
         mainlayout.getChildren().addAll(mBar,firstRow,secondContainer);
@@ -453,6 +463,9 @@ public class HelloApplication extends Application {
         lib = new Library();
         tableView.getItems().clear();
         return;
+    }
+    public void deleteBook(){
+
     }
     public static void main(String[] args) {
         launch();
