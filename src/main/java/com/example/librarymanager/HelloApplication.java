@@ -352,8 +352,10 @@ public class HelloApplication extends Application {
                lib.getBookList().add(curr);
             }catch (InputMismatchException inputMismatchException){
                 showAlert("Warning","Warning",inputMismatchException.getMessage());
+                return;
             }catch(NumberFormatException numberFormatException){
                 showAlert("Warning","Warning",numberFormatException.getMessage());
+                return;
             }
 
             tableView.getItems().clear();
@@ -603,8 +605,10 @@ public class HelloApplication extends Application {
                 bookToEdit.setTags(tagsField.getText());
             }catch (InputMismatchException inputMismatchException){
                 showAlert("Warning","Warning",inputMismatchException.getMessage());
+                return;
             }catch(NumberFormatException numberFormatException){
                 showAlert("Warning","Warning",numberFormatException.getMessage());
+                return;
             }
             // Update book information with edited values
 
