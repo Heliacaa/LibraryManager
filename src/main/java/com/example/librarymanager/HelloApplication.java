@@ -45,7 +45,7 @@ public class HelloApplication extends Application {
         HBox firstRow = new HBox(8);
 
         Label labelSearch = new Label("Search :");
-        Label labelSortBy = new Label("Sort by : ");
+        Label labelSortBy = new Label("Search by : ");
 
 
         choiceBox.getItems().addAll(
@@ -121,10 +121,15 @@ public class HelloApplication extends Application {
 
         Button buttonSearch = new Button("Search");
         buttonSearch.setOnAction(e->search());
+        Button buttonResetSearch = new Button("Reset Search");
+        buttonResetSearch.setOnAction(e->{
+            tableView.getItems().clear();
+            tableView.getItems().addAll(lib.getBookList());
+        });
         Button buttonAdd = new Button("Add");
 
         MenuItem mItemNew = new MenuItem("New");
-        mItemNew.setOnAction(e->newLib());
+        mItemNew.setOnAction(e->newLib(stage));
         MenuItem mItemImport = new MenuItem("Import");
         MenuItem mItemExport = new MenuItem("Export");
         mItemExport.setOnAction(e -> {
@@ -138,6 +143,10 @@ public class HelloApplication extends Application {
                 fileInputOutput = new FileInputOutput("fThread",selectedFile,"w", lib.getBookList());
                 System.out.println("Selected file: " + filePath);
                 fileInputOutput.run();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText("File was successfully created on ."+filePath.toString());
+                alert.initOwner(stage);
+                alert.showAndWait();
             } else {
                 System.out.println("File selection canceled.");
             }
@@ -153,7 +162,7 @@ public class HelloApplication extends Application {
         mFile.getItems().addAll(mItemNew,mItemImport,mItemExport);
         mBar.getMenus().addAll(mFile,mAbout);
 
-        firstRow.getChildren().addAll(labelSearch,textFieldSearch,labelSortBy,choiceBox,buttonSearch,buttonAdd);
+        firstRow.getChildren().addAll(labelSearch,textFieldSearch,labelSortBy,choiceBox,buttonSearch,buttonResetSearch,buttonAdd);
 
         HBox.setHgrow(textFieldSearch, Priority.ALWAYS);
         VBox popupContentVBox = new VBox();
@@ -473,9 +482,13 @@ public class HelloApplication extends Application {
         }
 
     }
-    public void newLib(){
+    public void newLib(Stage stage){
         lib = new Library();
         tableView.getItems().clear();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText("New library is created successfully.");
+        alert.initOwner(stage);
+        alert.showAndWait();
         return;
     }
 
