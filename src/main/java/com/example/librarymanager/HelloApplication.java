@@ -63,9 +63,9 @@ public class HelloApplication extends Application {
         );
         choiceBox.setValue("title");
 
-        Book b1 = new Book("Harry Potter and the Philosopher's Stone", "Subtitle 1", new ArrayList<>(List.of("J.K. Rowling")), new ArrayList<>(List.of("Translator 1")), "9781408855652", "Bloomsbury Publishing", "26 June 1997", "First Edition", "Hardcover", "English", 4.5, new ArrayList<>(List.of("Fantasy", "Magic")),"./img1.jpg");
-        Book b2 = new Book("The Hobbit", "Subtitle 2", new ArrayList<>(List.of("J.R.R. Tolkien")), new ArrayList<>(List.of("Translator 2")), "9780547928227", "Houghton Mifflin Harcourt", "21 September 1937", "First Edition", "Paperback", "English", 4.8, new ArrayList<>(List.of("Fantasy")),"./img1.jpg");
-        Book b3 = new Book("Pride and Prejudice", "Subtitle 3", new ArrayList<>(List.of("Jane Austen")), new ArrayList<>(), "9780141199078", "Penguin Books", "28 January 1813", "First Edition", "Paperback", "English", 4.2, new ArrayList<>(List.of("Romance")),"./img1.jpg");
+        Book b1 = new Book("Harry Potter and the Philosopher's Stone", "Subtitle 1", new ArrayList<>(List.of("J.K. Rowling")), new ArrayList<>(List.of("Translator 1")), "9781408855652", "Bloomsbury Publishing", "26 June 1997", "First Edition", "Hardcover", "English", 4.5, new ArrayList<>(List.of("Fantasy", "Magic")),"img1.jpg");
+        Book b2 = new Book("The Hobbit", "Subtitle 2", new ArrayList<>(List.of("J.R.R. Tolkien")), new ArrayList<>(List.of("Translator 2")), "9780547928227", "Houghton Mifflin Harcourt", "21 September 1937", "First Edition", "Paperback", "English", 4.8, new ArrayList<>(List.of("Fantasy")),"img1.jpg");
+        Book b3 = new Book("Pride and Prejudice", "Subtitle 3", new ArrayList<>(List.of("Jane Austen")), new ArrayList<>(), "9780141199078", "Penguin Books", "28 January 1813", "First Edition", "Paperback", "English", 4.2, new ArrayList<>(List.of("Romance")),"img1.jpg");
         ArrayList<Book> arrList = new ArrayList<>();
 
         arrList.add(b1);
@@ -293,13 +293,6 @@ public class HelloApplication extends Application {
         addBookLayout.add(filePath,0,6);
 
 
-
-        //"title","subtitle","authors","translators","ISBN","publisher","date","edition","cover","language","rating","tags"
-
-        // Add components to layout
-        //addBookLayout.getChildren().addAll(titleLabel, titleField, subtitleLabel, subtitleField, authorlabel, authorField, translatorlabel, translatorField, ISBNLabel, ISBNField, publisherLabel, publisherField,
-                //dateLabel, dateField, editionLabel, editionField, coverLabel, coverField, languageLabel, languageField, ratingLabel, ratingField, tagsLabel, tagsField);
-
         Button addImgButton = new Button("Add Image");
 
         FileChooser fileChooser = new FileChooser();
@@ -495,7 +488,7 @@ public class HelloApplication extends Application {
         TextField titleField = new TextField(bookToEdit.getTitle());
         TextField subtitleField = new TextField(bookToEdit.getSubtitle());
         TextField authorField = new TextField(bookToEdit.getAuthors().getFirst());
-        TextField translatorField = new TextField(); // Assuming translator is not editable in this scenario
+        TextField translatorField = new TextField(String.join(", ", bookToEdit.getTranslators())); // Assuming translator is not editable in this scenario
         TextField ISBNField = new TextField(bookToEdit.getISBN());
         TextField publisherField = new TextField(bookToEdit.getPublisher());
         TextField dateField = new TextField(bookToEdit.getDate());
@@ -518,6 +511,7 @@ public class HelloApplication extends Application {
         Label languageLabel = new Label("Language:");
         Label ratingLabel = new Label("Rating:");
         Label tagsLabel = new Label("Tags:");
+        Label filePath = new Label("Image :");
 
         // Add labels and text fields to the grid pane
         editBookLayout.add(titleLabel, 0, 0);
@@ -544,6 +538,31 @@ public class HelloApplication extends Application {
         editBookLayout.add(ratingField, 1, 5);
         editBookLayout.add(tagsLabel, 2, 5);
         editBookLayout.add(tagsField, 3, 5);
+        editBookLayout.add(filePath,0,6);
+
+        Button addImgButton = new Button("Add Image");
+
+        FileChooser fileChooser = new FileChooser();
+
+        // Sadece PNG ve JPEG uzantılı dosyaları filtreleme
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg");
+        fileChooser.getExtensionFilters().add(filter);
+
+        final File[] selectedFile = {new File(bookToEdit.getImgFilePath())};
+        // Butona tıklandığında dosya seçiciyi açma
+        addImgButton.setOnAction(e -> {
+            selectedFile[0] = fileChooser.showOpenDialog(editBookStage);
+            if (selectedFile[0] == null) {
+                return;
+            } else {
+                try {
+                    bookToEdit.setImgFilePath(selectedFile[0].toURI().toURL().toString());
+
+                } catch (MalformedURLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
         // Create button for saving edited book
         Button saveButton = new Button("Save");
@@ -551,39 +570,37 @@ public class HelloApplication extends Application {
             // Update book information with edited values
             bookToEdit.setTitle(titleField.getText());
             bookToEdit.setSubtitle(subtitleField.getText());
-            bookToEdit.setAuthors(authorField.getText());
+            //bookToEdit.setAuthors(authorField.getText());
+            //bookToEdit.setTranslators(translatorField.getText());
             bookToEdit.setISBN(ISBNField.getText());
             bookToEdit.setPublisher(publisherField.getText());
             bookToEdit.setDate(dateField.getText());
             bookToEdit.setEdition(editionField.getText());
             bookToEdit.setCover(coverField.getText());
             bookToEdit.setLanguage(languageField.getText());
-            //bookToEdit.setRating(Double.parseDouble(ratingField.getText()));
-            List<String> tags = Arrays.asList(tagsField.getText().split(",\\s*")); // Split tags by comma and trim spaces
-            //bookToEdit.setTags(tags);
+            bookToEdit.setRating(ratingField.getText());
+            //bookToEdit.setTags(tagsField.getText());
+            //List<String> tags = Arrays.asList(tagsField.getText().split(",\\s*")); // Split tags by comma and trim spaces
 
-            // Save edited book to JSON file
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.enable(SerializationFeature.INDENT_OUTPUT); // Enable pretty printing
-            try {
-                objectMapper.writeValue(new File("books.json"), bookToEdit);
 
-            } catch (IOException ex) {
 
-                ex.printStackTrace();
+            tableView.getItems().clear();
+            for(Book i : lib.getBookList()){
+                tableView.getItems().add(i);
             }
-
             // Close the edit book window
             editBookStage.close();
         });
 
         // Add button to the grid pane
         editBookLayout.add(saveButton, 1, 6, 3, 1);
+        editBookLayout.add(addImgButton,1,6);
         GridPane.setHalignment(saveButton, HPos.CENTER); // Center the button horizontally
 
         // Set scene for edit book window
         Scene editBookScene = new Scene(editBookLayout, 600, 300);
         editBookStage.setScene(editBookScene);
+
         // Show edit book window
         editBookStage.show();
     }
