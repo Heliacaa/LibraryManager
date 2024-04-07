@@ -1,5 +1,7 @@
 package com.example.librarymanager;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -24,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -199,6 +202,14 @@ public class HelloApplication extends Application {
         VBox.setVgrow(secondContainer,Priority.ALWAYS);
         VBox.setMargin(firstRow,new Insets(8));
         buttonAdd.setOnAction(e->openAddBookWindow());
+        buttonEdit.setOnAction(e -> {
+            Book selectedBook = tableView.getSelectionModel().getSelectedItem();
+            if (selectedBook != null) {
+                openEditBookWindow(selectedBook);
+            } else {
+                // Handle case where no book is selected
+            }
+        });
 
         Scene scene = new Scene(mainlayout, 1200, 500);
         stage.setTitle("Library Management System");
@@ -464,6 +475,117 @@ public class HelloApplication extends Application {
         tableView.getItems().clear();
         return;
     }
+
+    private void openEditBookWindow(Book bookToEdit) {
+        // Create a new stage for the edit book window
+        Stage editBookStage = new Stage();
+        editBookStage.setTitle("Edit Book");
+        editBookStage.initModality(Modality.APPLICATION_MODAL);
+
+        // Create layout for edit book window
+        GridPane editBookLayout = new GridPane();
+        editBookLayout.setAlignment(Pos.CENTER);
+        editBookLayout.setHgap(10);
+        editBookLayout.setVgap(10);
+        editBookLayout.setPadding(new Insets(20));
+
+        // Create text fields for book information
+        TextField titleField = new TextField(bookToEdit.getTitle());
+        TextField subtitleField = new TextField(bookToEdit.getSubtitle());
+        TextField authorField = new TextField(bookToEdit.getAuthors().getFirst());
+        TextField translatorField = new TextField(); // Assuming translator is not editable in this scenario
+        TextField ISBNField = new TextField(bookToEdit.getISBN());
+        TextField publisherField = new TextField(bookToEdit.getPublisher());
+        TextField dateField = new TextField(bookToEdit.getDate());
+        TextField editionField = new TextField(bookToEdit.getEdition());
+        TextField coverField = new TextField(bookToEdit.getCover());
+        TextField languageField = new TextField(bookToEdit.getLanguage());
+        TextField ratingField = new TextField(String.valueOf(bookToEdit.getRating()));
+        TextField tagsField = new TextField(String.join(", ", bookToEdit.getTags())); // Assuming tags are separated by comma
+
+        // Create labels for text fields
+        Label titleLabel = new Label("Title:");
+        Label subtitleLabel = new Label("Subtitle:");
+        Label authorLabel = new Label("Author:");
+        Label translatorLabel = new Label("Translator:");
+        Label ISBNLabel = new Label("ISBN:");
+        Label publisherLabel = new Label("Publisher:");
+        Label dateLabel = new Label("Date:");
+        Label editionLabel = new Label("Edition:");
+        Label coverLabel = new Label("Cover:");
+        Label languageLabel = new Label("Language:");
+        Label ratingLabel = new Label("Rating:");
+        Label tagsLabel = new Label("Tags:");
+
+        // Add labels and text fields to the grid pane
+        editBookLayout.add(titleLabel, 0, 0);
+        editBookLayout.add(titleField, 1, 0);
+        editBookLayout.add(subtitleLabel, 2, 0);
+        editBookLayout.add(subtitleField, 3, 0);
+        editBookLayout.add(authorLabel, 0, 1);
+        editBookLayout.add(authorField, 1, 1);
+        editBookLayout.add(translatorLabel, 2, 1);
+        editBookLayout.add(translatorField, 3, 1);
+        editBookLayout.add(ISBNLabel, 0, 2);
+        editBookLayout.add(ISBNField, 1, 2);
+        editBookLayout.add(publisherLabel, 2, 2);
+        editBookLayout.add(publisherField, 3, 2);
+        editBookLayout.add(dateLabel, 0, 3);
+        editBookLayout.add(dateField, 1, 3);
+        editBookLayout.add(editionLabel, 2, 3);
+        editBookLayout.add(editionField, 3, 3);
+        editBookLayout.add(coverLabel, 0, 4);
+        editBookLayout.add(coverField, 1, 4);
+        editBookLayout.add(languageLabel, 2, 4);
+        editBookLayout.add(languageField, 3, 4);
+        editBookLayout.add(ratingLabel, 0, 5);
+        editBookLayout.add(ratingField, 1, 5);
+        editBookLayout.add(tagsLabel, 2, 5);
+        editBookLayout.add(tagsField, 3, 5);
+
+        // Create button for saving edited book
+        Button saveButton = new Button("Save");
+        saveButton.setOnAction(e -> {
+            // Update book information with edited values
+            bookToEdit.setTitle(titleField.getText());
+            bookToEdit.setSubtitle(subtitleField.getText());
+            bookToEdit.setAuthors(authorField.getText());
+            bookToEdit.setISBN(ISBNField.getText());
+            bookToEdit.setPublisher(publisherField.getText());
+            bookToEdit.setDate(dateField.getText());
+            bookToEdit.setEdition(editionField.getText());
+            bookToEdit.setCover(coverField.getText());
+            bookToEdit.setLanguage(languageField.getText());
+            //bookToEdit.setRating(Double.parseDouble(ratingField.getText()));
+            List<String> tags = Arrays.asList(tagsField.getText().split(",\\s*")); // Split tags by comma and trim spaces
+            //bookToEdit.setTags(tags);
+
+            // Save edited book to JSON file
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.enable(SerializationFeature.INDENT_OUTPUT); // Enable pretty printing
+            try {
+                objectMapper.writeValue(new File("books.json"), bookToEdit);
+
+            } catch (IOException ex) {
+
+                ex.printStackTrace();
+            }
+
+            // Close the edit book window
+            editBookStage.close();
+        });
+
+        // Add button to the grid pane
+        editBookLayout.add(saveButton, 1, 6, 3, 1);
+        GridPane.setHalignment(saveButton, HPos.CENTER); // Center the button horizontally
+
+        // Set scene for edit book window
+        Scene editBookScene = new Scene(editBookLayout, 600, 300);
+        editBookStage.setScene(editBookScene);
+        // Show edit book window
+        editBookStage.show();
+    }
+
     public void deleteBook(){
 
     }
