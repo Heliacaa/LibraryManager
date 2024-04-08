@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.NoSuchFileException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -141,17 +142,26 @@ public class HelloApplication extends Application {
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json");
             fileChooser.getExtensionFilters().add(extFilter);
             File selectedFile = fileChooser.showOpenDialog(stage);
-            if (selectedFile != null) {
-                String filePath = selectedFile.getAbsolutePath();
-                fileInputOutput = new FileInputOutput("fThread",selectedFile,"w", lib.getBookList());
-                System.out.println("Selected file: " + filePath);
-                fileInputOutput.run();
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("File was successfully created on ."+filePath.toString());
-                alert.initOwner(stage);
-                alert.showAndWait();
-            } else {
-                System.out.println("File selection canceled.");
+            try{
+                if (selectedFile != null) {
+                    String filePath = selectedFile.getAbsolutePath();
+                    fileInputOutput = new FileInputOutput("fThread",selectedFile,"w", lib.getBookList());
+                    System.out.println("Selected file: " + filePath);
+                    fileInputOutput.run();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setContentText("File was successfully created on ."+filePath.toString());
+                    alert.initOwner(stage);
+                    alert.showAndWait();
+                } else {
+                    selectedFile = new File("books.json");
+                    String filePath = selectedFile.getAbsolutePath();
+                    fileInputOutput = new FileInputOutput("fThread",selectedFile,"w", lib.getBookList());
+                    System.out.println("Selected file: " + filePath);
+                    fileInputOutput.run();
+                    throw new NoSuchFileException("File selection is cancelled.\nFile was automatically saved on :\n"+selectedFile.getAbsolutePath());
+                }
+            }catch(Exception exception){
+                showAlert("Info","Info",exception.getMessage());
             }
         });
         MenuItem mItemAbout = new MenuItem("About");
@@ -322,11 +332,15 @@ public class HelloApplication extends Application {
         final File[] selectedFile = new File[1];
         // Butona tıklandığında dosya seçiciyi açma
         addImgButton.setOnAction(e -> {
-            selectedFile[0] = fileChooser.showOpenDialog(addBookStage);
-            if (selectedFile[0] != null) {
+            try{
+                selectedFile[0] = fileChooser.showOpenDialog(addBookStage);
+                if (selectedFile[0] != null) {
 
-            } else {
-                System.out.println("File selection canceled.");
+                } else {
+                    throw new NoSuchFileException("File selection is cancelled.If you do not select a file, your book image will be entered by default.");
+                }
+            }catch(NoSuchFileException exception){
+                showAlert("Info","Info",exception.getMessage());
             }
         });
 
@@ -857,6 +871,11 @@ public class HelloApplication extends Application {
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
+        // Create a custom dialog pane with a larger size
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.setPrefWidth(400); // Set preferred width
+        dialogPane.setPrefHeight(200); // Set preferred height
+
         alert.showAndWait();
     }
     public static void main(String[] args) {
