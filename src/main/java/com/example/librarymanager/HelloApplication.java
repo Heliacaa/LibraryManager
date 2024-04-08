@@ -258,7 +258,7 @@ public class HelloApplication extends Application {
         TextField coverField = new TextField();
         TextField languageField = new TextField();
         TextField ratingField = new TextField();
-        TextField tagsField = new TextField();
+        //TextField tagsField = new TextField();
 
 
         // Create labels for text fields
@@ -720,6 +720,9 @@ public class HelloApplication extends Application {
         Label tagsLabel = new Label("Tags:");
         Label filePath = new Label("Image :");
 
+        Button selectTagsButton = new Button("Select Tags");
+        ArrayList<String> tags = new ArrayList<>();
+        selectTagsButton.setOnAction(e -> showTagsSelectionWindow(editBookStage,tags));
         // Add labels and text fields to the grid pane
         editBookLayout.add(titleLabel, 0, 0);
         editBookLayout.add(titleField, 1, 0);
@@ -744,7 +747,7 @@ public class HelloApplication extends Application {
         editBookLayout.add(ratingLabel, 0, 5);
         editBookLayout.add(ratingField, 1, 5);
         editBookLayout.add(tagsLabel, 2, 5);
-        editBookLayout.add(tagsField, 3, 5);
+        editBookLayout.add(selectTagsButton, 3, 5);
         editBookLayout.add(filePath,0,6);
 
         Button addImgButton = new Button("Add Image");
@@ -787,6 +790,7 @@ public class HelloApplication extends Application {
                 bookToEdit.setLanguage(languageField.getText());
                 bookToEdit.setRating(ratingField.getText());
                 bookToEdit.setTags(tagsField.getText());
+                bookToEdit.setTags(tags);
             }catch (InputMismatchException inputMismatchException){
                 showAlert("Warning","Warning",inputMismatchException.getMessage());
                 return;
