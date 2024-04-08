@@ -357,7 +357,7 @@ public class HelloApplication extends Application {
                     imgFilePath=selectedFile[0].toURI().toURL().toString();
                 }
             } catch (MalformedURLException ex) {
-                throw new RuntimeException(ex);
+                showAlert("Warning","Warning",ex.getMessage());
             }
 
             try{
@@ -369,6 +369,9 @@ public class HelloApplication extends Application {
                 return;
             }catch(NumberFormatException numberFormatException){
                 showAlert("Warning","Warning",numberFormatException.getMessage());
+                return;
+            }catch(IllegalArgumentException illegalArgumentException){
+                showAlert("Warning","Warning",illegalArgumentException.getMessage());
                 return;
             }
 
@@ -818,6 +821,9 @@ public class HelloApplication extends Application {
                 return;
             }catch(NumberFormatException numberFormatException){
                 showAlert("Warning","Warning",numberFormatException.getMessage());
+                return;
+            }catch(IllegalArgumentException illegalArgumentException){
+                showAlert("Warning","Warning",illegalArgumentException.getMessage());
                 return;
             }
             // Update book information with edited values

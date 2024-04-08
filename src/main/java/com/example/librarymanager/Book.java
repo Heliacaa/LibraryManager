@@ -63,7 +63,14 @@ public class Book {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        try {
+            if (title == null || title.isBlank()) {
+                throw new IllegalArgumentException("Başlık bilgisi boş olamaz.");
+            }
+            this.title = title;
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
     }
 
     public String getSubtitle() {
@@ -71,7 +78,14 @@ public class Book {
     }
 
     public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
+        try {
+            if (subtitle == null||subtitle.isBlank()) {
+                throw new IllegalArgumentException("Alt başlık bilgisi null olamaz.");
+            }
+            this.subtitle = subtitle;
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
     }
 
     public ArrayList<String> getAuthors() {
@@ -79,6 +93,19 @@ public class Book {
     }
 
     public void setAuthors(String authors) {
+        try {
+            if (authors == null || authors.isBlank()) {
+                throw new IllegalArgumentException("Yazar bilgisi boş olamaz.");
+            }
+
+            // Virgül ile ayrılan yazarları parçala
+            String[] authorArray = authors.split(",");
+
+            // Yazarlar listesini oluştur
+            this.authors = new ArrayList<>(Arrays.asList(authorArray));
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
         try{
             String[] authorArray = authors.split(",");
             this.authors = new ArrayList<>(Arrays.asList(authorArray));
@@ -92,6 +119,19 @@ public class Book {
     }
 
     public void setTranslators(String translators) {
+        try {
+            if (translators == null || translators.isBlank()) {
+                throw new IllegalArgumentException("Translator bilgisi boş olamaz.");
+            }
+
+            // Virgül ile ayrılan çevirmenleri parçala
+            String[] translatorArray = translators.split(",");
+
+            // Çevirmenler listesini oluştur
+            this.translators = new ArrayList<>(Arrays.asList(translatorArray));
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
         try{
             String[] translatorArray = translators.split(",");
             this.translators = new ArrayList<>(Arrays.asList(translatorArray));
@@ -105,7 +145,29 @@ public class Book {
     }
 
     public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
+        try {
+            if (ISBN == null || ISBN.isBlank()) {
+                throw new IllegalArgumentException("ISBN bilgisi boş olamaz.");
+            }
+
+            // ISBN numarasının uzunluğunu kontrol et
+            if (ISBN.length() != 10 && ISBN.length() != 13) {
+                throw new IllegalArgumentException("ISBN numarası 10 veya 13 karakter uzunluğunda olmalıdır.");
+            }
+
+            // ISBN numarasının sadece rakam veya son karakterinde 'X' olup olmadığını kontrol et
+            for (int i = 0; i < ISBN.length(); i++) {
+                char c = ISBN.charAt(i);
+                if (!Character.isDigit(c) && (i != ISBN.length() - 1 || (c != 'X' && c != 'x'))) {
+                    throw new IllegalArgumentException("ISBN numarası yalnızca rakamlardan oluşmalıdır (son karakter 'X' olabilir).");
+                }
+            }
+
+            // Buraya kadar bir hata yoksa, ISBN numarasını atayabiliriz
+            this.ISBN = ISBN;
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
     }
 
     public String getPublisher() {
@@ -113,7 +175,15 @@ public class Book {
     }
 
     public void setPublisher(String publisher) {
-        this.publisher = publisher;
+        try {
+            if (publisher == null || publisher.isBlank()) {
+                throw new IllegalArgumentException("Yayınevi bilgisi boş olamaz.");
+            }
+            // Buraya kadar bir hata yoksa, yayınevi bilgisini atayabiliriz
+            this.publisher = publisher;
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
     }
 
     public String getDate() {
@@ -129,7 +199,23 @@ public class Book {
     }
 
     public void setEdition(String edition) {
-        this.edition = edition;
+        try {
+            if (edition == null||edition.isBlank()) {
+                throw new IllegalArgumentException("Baskı bilgisi boş olamaz.");
+            }
+
+            // Edition değerinin sadece rakamlardan oluştuğunu kontrol et
+            for (char c : edition.toCharArray()) {
+                if (!Character.isDigit(c)) {
+                    throw new IllegalArgumentException("Baskı bilgisi yalnızca rakamlardan oluşmalıdır.");
+                }
+            }
+
+            // Buraya kadar herhangi bir hata olmadığına göre, edition değerini atayabiliriz
+            this.edition = edition;
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
     }
 
     public String getCover() {
@@ -137,7 +223,19 @@ public class Book {
     }
 
     public void setCover(String cover) {
-        this.cover = cover;
+        try {
+            if (cover == null || cover.isBlank()) {
+                throw new IllegalArgumentException("Dil bilgisi null olamaz.");
+            }
+            for (char c : cover.toCharArray()) {
+                if (Character.isDigit(c)) {
+                    throw new IllegalArgumentException("Dil bilgisi sayı içeremez.");
+                }
+            }
+            this.cover = cover;
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
     }
 
     public String getLanguage() {
@@ -145,7 +243,19 @@ public class Book {
     }
 
     public void setLanguage(String language) {
-        this.language = language;
+        try {
+            if (language == null||language.isBlank()) {
+                throw new IllegalArgumentException("Dil bilgisi null olamaz.");
+            }
+            for (char c : language.toCharArray()) {
+                if (Character.isDigit(c)) {
+                    throw new IllegalArgumentException("Dil bilgisi sayı içeremez.");
+                }
+            }
+            this.language = language;
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
     }
 
     public double getRating() {
@@ -155,9 +265,14 @@ public class Book {
     public void setRating(String rating) throws NumberFormatException {
         try {
             double parsedRating = Double.parseDouble(rating);
+            if (parsedRating < 0 || parsedRating > 10.0) {
+                throw new IllegalArgumentException("Rating değeri 0 ile 10 arasında olmalıdır.");
+            }
             this.rating=parsedRating;
         } catch (NumberFormatException e) {
             throw new NumberFormatException("Rating için double bir değer giriniz.");
+        } catch (IllegalArgumentException e){
+            throw e;
         }
     }
 
@@ -166,9 +281,9 @@ public class Book {
     }
 
     public void setTags(String tags) throws InputMismatchException{
-//        if (tags == null || tags.isBlank()) {
-//            throw new InputMismatchException("Etiketler boş olamaz.");
-//        }
+        if (tags == null || tags.isBlank()) {
+            throw new InputMismatchException("Etiketler boş olamaz.");
+        }
         try{
             String[] tagArray = tags.split(",");
             this.tags = new ArrayList<>(Arrays.asList(tagArray));
@@ -177,19 +292,26 @@ public class Book {
         }
     }
     public void setTags(ArrayList tags){
+        if (tags == null || tags.isEmpty()){
+            throw new InputMismatchException("Etiketler boş olamaz.");
+        }
         this.tags=tags;
     }
-
-
     public String getImgFilePath() {
         return imgFilePath;
     }
 
     public void setImgFilePath(String imgFilePath) {
-        if(imgFilePath.equals(null)){
-            this.imgFilePath="noPic.jpg";
+        try {
+            if (imgFilePath == null) {
+                this.imgFilePath = "noPic.jpg";
+            } else {
+                this.imgFilePath = imgFilePath;
+            }
+        } catch (Exception e) {
+            // Hata durumunda gerekirse burada bir işlem yapabilirsiniz.
+            e.printStackTrace();
         }
-        this.imgFilePath = imgFilePath;
     }
 
     @Override
