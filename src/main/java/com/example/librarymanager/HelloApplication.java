@@ -26,6 +26,8 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InputMismatchException;
@@ -253,7 +255,7 @@ public class HelloApplication extends Application {
         TextField translatorField = new TextField();
         TextField ISBNField = new TextField();
         TextField publisherField = new TextField();
-        TextField dateField = new TextField();
+        //TextField dateField = new TextField();
         TextField editionField = new TextField();
         TextField coverField = new TextField();
         TextField languageField = new TextField();
@@ -280,6 +282,9 @@ public class HelloApplication extends Application {
         ArrayList<String> tags = new ArrayList<>();
         selectTagsButton.setOnAction(e -> showTagsSelectionWindow(addBookStage,tags));
 
+        DatePicker datePicker = new DatePicker();
+        datePicker.setValue(LocalDate.now());
+
         addBookLayout.add(titleLabel, 0, 0);
         addBookLayout.add(titleField, 1, 0);
         addBookLayout.add(subtitleLabel, 2, 0);
@@ -293,7 +298,7 @@ public class HelloApplication extends Application {
         addBookLayout.add(publisherLabel, 2, 2);
         addBookLayout.add(publisherField, 3, 2);
         addBookLayout.add(dateLabel, 0, 3);
-        addBookLayout.add(dateField, 1, 3);
+        addBookLayout.add(datePicker, 1, 3);
         addBookLayout.add(editionLabel, 2, 3);
         addBookLayout.add(editionField, 3, 3);
         addBookLayout.add(coverLabel, 0, 4);
@@ -335,7 +340,12 @@ public class HelloApplication extends Application {
             String translator = translatorField.getText();
             String ISBN = ISBNField.getText();
             String publisher = publisherField.getText();
-            String date = dateField.getText();
+            // Seçilen tarihi al
+            LocalDate selectedDate = datePicker.getValue();
+
+            // Tarihi stringe dönüştür
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String date = selectedDate.format(formatter);
             String edition = editionField.getText();
             String cover = coverField.getText();
             String language = languageField.getText();
@@ -431,6 +441,9 @@ public class HelloApplication extends Application {
         ));
         for (String tag : tagsList) {
             CheckBox checkBox = new CheckBox(tag);
+            if (tags.contains(tag)) {
+                checkBox.setSelected(true);
+            }
             if (tagsList.indexOf(tag) < tagsList.size() / 2) {
                 leftBox.getChildren().add(checkBox);
             } else {
@@ -442,7 +455,7 @@ public class HelloApplication extends Application {
         // Add button to confirm selection
         Button confirmButton = new Button("Confirm");
         confirmButton.setOnAction(e -> {
-
+            tags.clear();
             for (Node node : leftBox.getChildren()) {
                 if (node instanceof CheckBox) {
                     CheckBox checkBox = (CheckBox) node;
@@ -698,12 +711,12 @@ public class HelloApplication extends Application {
         TextField translatorField = new TextField(String.join(", ", bookToEdit.getTranslators())); // Assuming translator is not editable in this scenario
         TextField ISBNField = new TextField(bookToEdit.getISBN());
         TextField publisherField = new TextField(bookToEdit.getPublisher());
-        TextField dateField = new TextField(bookToEdit.getDate());
+        //TextField dateField = new TextField(bookToEdit.getDate());
         TextField editionField = new TextField(bookToEdit.getEdition());
         TextField coverField = new TextField(bookToEdit.getCover());
         TextField languageField = new TextField(bookToEdit.getLanguage());
         TextField ratingField = new TextField(String.valueOf(bookToEdit.getRating()));
-        TextField tagsField = new TextField(String.join(", ", bookToEdit.getTags())); // Assuming tags are separated by comma
+        //TextField tagsField = new TextField(String.join(", ", bookToEdit.getTags())); // Assuming tags are separated by comma
 
         // Create labels for text fields
         Label titleLabel = new Label("Title:");
@@ -720,9 +733,12 @@ public class HelloApplication extends Application {
         Label tagsLabel = new Label("Tags:");
         Label filePath = new Label("Image :");
 
+        DatePicker datePicker = new DatePicker();
+        datePicker.setValue(LocalDate.now());
+
         Button selectTagsButton = new Button("Select Tags");
         ArrayList<String> tags = new ArrayList<>();
-        selectTagsButton.setOnAction(e -> showTagsSelectionWindow(editBookStage,tags));
+        selectTagsButton.setOnAction(e -> showTagsSelectionWindow(editBookStage,bookToEdit.getTags()));
         // Add labels and text fields to the grid pane
         editBookLayout.add(titleLabel, 0, 0);
         editBookLayout.add(titleField, 1, 0);
@@ -737,7 +753,7 @@ public class HelloApplication extends Application {
         editBookLayout.add(publisherLabel, 2, 2);
         editBookLayout.add(publisherField, 3, 2);
         editBookLayout.add(dateLabel, 0, 3);
-        editBookLayout.add(dateField, 1, 3);
+        editBookLayout.add(datePicker, 1, 3);
         editBookLayout.add(editionLabel, 2, 3);
         editBookLayout.add(editionField, 3, 3);
         editBookLayout.add(coverLabel, 0, 4);
@@ -784,13 +800,19 @@ public class HelloApplication extends Application {
                 bookToEdit.setTranslators(translatorField.getText());
                 bookToEdit.setISBN(ISBNField.getText());
                 bookToEdit.setPublisher(publisherField.getText());
-                bookToEdit.setDate(dateField.getText());
+                // Seçilen tarihi al
+                LocalDate selectedDate = datePicker.getValue();
+
+                // Tarihi stringe dönüştür
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                String date = selectedDate.format(formatter);
+                bookToEdit.setDate(date);
                 bookToEdit.setEdition(editionField.getText());
                 bookToEdit.setCover(coverField.getText());
                 bookToEdit.setLanguage(languageField.getText());
                 bookToEdit.setRating(ratingField.getText());
-                bookToEdit.setTags(tagsField.getText());
-                bookToEdit.setTags(tags);
+                //bookToEdit.setTags(tagsField.getText());
+                bookToEdit.setTags(bookToEdit.getTags());
             }catch (InputMismatchException inputMismatchException){
                 showAlert("Warning","Warning",inputMismatchException.getMessage());
                 return;
