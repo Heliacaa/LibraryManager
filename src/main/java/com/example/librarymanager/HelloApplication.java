@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -275,6 +276,9 @@ public class HelloApplication extends Application {
         Label tagsLabel = new Label("Tags:");
         Label filePath = new Label("Image :");
 
+        Button selectTagsButton = new Button("Select Tags");
+        ArrayList<String> tags = new ArrayList<>();
+        selectTagsButton.setOnAction(e -> showTagsSelectionWindow(addBookStage,tags));
 
         addBookLayout.add(titleLabel, 0, 0);
         addBookLayout.add(titleField, 1, 0);
@@ -299,9 +303,8 @@ public class HelloApplication extends Application {
         addBookLayout.add(ratingLabel, 0, 5);
         addBookLayout.add(ratingField, 1, 5);
         addBookLayout.add(tagsLabel, 2, 5);
-        addBookLayout.add(tagsField, 3, 5);
+        addBookLayout.add(selectTagsButton, 3, 5);
         addBookLayout.add(filePath,0,6);
-
 
         Button addImgButton = new Button("Add Image");
 
@@ -337,8 +340,8 @@ public class HelloApplication extends Application {
             String cover = coverField.getText();
             String language = languageField.getText();
             String rating = ratingField.getText();
-            String tags = tagsField.getText();
             String imgFilePath = "noPic.jpg";
+
             try {
                 if(selectedFile[0]!=null){
                     imgFilePath=selectedFile[0].toURI().toURL().toString();
@@ -348,7 +351,8 @@ public class HelloApplication extends Application {
             }
 
             try{
-               Book curr = new Book(title, subtitle,author,translator, ISBN, publisher, date, edition, cover, language, rating,tags,imgFilePath);
+               Book curr = new Book(title, subtitle,author,translator, ISBN, publisher, date, edition, cover, language, rating,"tags",imgFilePath);
+               curr.setTags(tags);
                lib.getBookList().add(curr);
             }catch (InputMismatchException inputMismatchException){
                 showAlert("Warning","Warning",inputMismatchException.getMessage());
@@ -378,8 +382,188 @@ public class HelloApplication extends Application {
         // Show add book window
         addBookStage.show();
     }
+    private void showTagsSelectionWindow(Stage primaryStage,ArrayList<String> tags) {
+        // Tags selection window
+        Stage tagsStage = new Stage();
+        tagsStage.setTitle("Select Tags");
+
+        // Layout for tags selection window
+        HBox root = new HBox(10);
+        HBox.setMargin(root,new Insets(20));
+        VBox leftBox = new VBox(10);
+        VBox rightBox = new VBox(10);
+        VBox buttonBox = new VBox(10);
+
+        // Mock tags list
+        List<String> tagsList = new ArrayList<>(Arrays.asList(
+                "Action and Adventure",
+                "Anthology",
+                "Art",
+                "Autobiographies",
+                "Biographies",
+                "Children's",
+                "Comics",
+                "Cookbooks",
+                "Diaries",
+                "Dictionaries",
+                "Drama",
+                "Encyclopedias",
+                "Fantasy",
+                "Guide",
+                "Health",
+                "History",
+                "Horror",
+                "Journals",
+                "Math",
+                "Mystery",
+                "Poetry",
+                "Prayer books",
+                "Religion, Spirituality & New Age",
+                "Romance",
+                "Satire",
+                "Science",
+                "Science Fiction",
+                "Self-help",
+                "Series",
+                "Travel",
+                "Trilogy",
+                "Young Adult"
+        ));
+        for (String tag : tagsList) {
+            CheckBox checkBox = new CheckBox(tag);
+            if (tagsList.indexOf(tag) < tagsList.size() / 2) {
+                leftBox.getChildren().add(checkBox);
+            } else {
+                rightBox.getChildren().add(checkBox);
+            }
+        }
+        // Checkboxes for tags selection
+
+        // Add button to confirm selection
+        Button confirmButton = new Button("Confirm");
+        confirmButton.setOnAction(e -> {
+
+            for (Node node : leftBox.getChildren()) {
+                if (node instanceof CheckBox) {
+                    CheckBox checkBox = (CheckBox) node;
+                    if (checkBox.isSelected()) {
+                        tags.add(checkBox.getText());
+                    }
+                }
+            }
+            for (Node node : rightBox.getChildren()) {
+                if (node instanceof CheckBox) {
+                    CheckBox checkBox = (CheckBox) node;
+                    if (checkBox.isSelected()) {
+                        tags.add(checkBox.getText());
+                    }
+                }
+            }
+            tagsStage.close();
+        });
+        buttonBox.getChildren().add(confirmButton);
+        buttonBox.setAlignment(Pos.BASELINE_CENTER);
+        root.getChildren().addAll(leftBox, rightBox,buttonBox);
+        tagsStage.setScene(new Scene(root, 500, 500));
+        tagsStage.initOwner(primaryStage);
+        tagsStage.show();
+    }
+    private void showTagsSearchWindow() {
+        // Tags selection window
+        Stage tagsStage = new Stage();
+        tagsStage.setTitle("Select Tags to Search");
+        ArrayList<String>tags = new ArrayList<String>();
+        // Layout for tags selection window
+        HBox root = new HBox(10);
+        HBox.setMargin(root,new Insets(20));
+        VBox leftBox = new VBox(10);
+        VBox rightBox = new VBox(10);
+        VBox buttonBox = new VBox(10);
+
+        // Mock tags list
+        List<String> tagsList = new ArrayList<>(Arrays.asList(
+                "Action and Adventure",
+                "Anthology",
+                "Art",
+                "Autobiographies",
+                "Biographies",
+                "Children's",
+                "Comics",
+                "Cookbooks",
+                "Diaries",
+                "Dictionaries",
+                "Drama",
+                "Encyclopedias",
+                "Fantasy",
+                "Guide",
+                "Health",
+                "History",
+                "Horror",
+                "Journals",
+                "Math",
+                "Mystery",
+                "Poetry",
+                "Prayer books",
+                "Religion, Spirituality & New Age",
+                "Romance",
+                "Satire",
+                "Science",
+                "Science Fiction",
+                "Self-help",
+                "Series",
+                "Travel",
+                "Trilogy",
+                "Young Adult"
+        ));
+        for (String tag : tagsList) {
+            CheckBox checkBox = new CheckBox(tag);
+            if (tagsList.indexOf(tag) < tagsList.size() / 2) {
+                leftBox.getChildren().add(checkBox);
+            } else {
+                rightBox.getChildren().add(checkBox);
+            }
+        }
+        // Checkboxes for tags selection
+
+        // Add button to confirm selection
+        Button searchButton = new Button("Search");
+        searchButton.setOnAction(e -> {
+            for (Node node : leftBox.getChildren()) {
+                if (node instanceof CheckBox) {
+                    CheckBox checkBox = (CheckBox) node;
+                    if (checkBox.isSelected()) {
+                        tags.add(checkBox.getText());
+                    }
+                }
+            }
+            for (Node node : rightBox.getChildren()) {
+                if (node instanceof CheckBox) {
+                    CheckBox checkBox = (CheckBox) node;
+                    if (checkBox.isSelected()) {
+                        tags.add(checkBox.getText());
+                    }
+                }
+            }
+            tableView.getItems().clear();
+            for(Book i : lib.getBookList()){
+                if(i.getTags().containsAll(tags)){
+                    tableView.getItems().add(i);
+                }
+            }
+            tagsStage.close();
+        });
+        buttonBox.getChildren().add(searchButton);
+        buttonBox.setAlignment(Pos.BASELINE_CENTER);
+        root.getChildren().addAll(leftBox, rightBox,buttonBox);
+        tagsStage.setScene(new Scene(root, 500, 500));
+        //tagsStage.initOwner(primaryStage);
+        tagsStage.show();
+    }
+
     public void search(){
-        if(textFieldSearch.getText().isBlank()){
+        if(choiceBox.getValue().equals("tags")){
+            showTagsSearchWindow();
+        }else if(textFieldSearch.getText().isBlank()){
             return;
         }
         else{
@@ -472,17 +656,17 @@ public class HelloApplication extends Application {
                     }
                     break;
                 case "tags":
-                    for(Book i : lib.getBookList()){
-                        for(String curr : i.getTags()){
-                            if(curr.equalsIgnoreCase(txtInfoVal)||curr.toLowerCase().contains(txtInfoVal)){
-                                tableView.getItems().add(i);
-                            }
-                        }
-                    }
-                    break;
+//                    for(Book i : lib.getBookList()){
+//                        for(String curr : i.getTags()){
+//                            if(curr.equalsIgnoreCase(txtInfoVal)||curr.toLowerCase().contains(txtInfoVal)){
+//                                tableView.getItems().add(i);
+//                            }
+//                        }
+//                    }
+                    return;
+                    //break;
             }
         }
-
     }
     public void newLib(Stage stage){
         lib = new Library();

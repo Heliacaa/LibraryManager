@@ -21,7 +21,7 @@ public class Book {
     private ArrayList<String> tags;
     private String imgFilePath;
     public static final String[] specs = {"title","subtitle","authors","translators","ISBN","publisher","date","edition","cover","language","rating","tags","imgFilePath"};
-    private Validation validator = new Validation();
+    //private Validation validator = new Validation();
 
     public Book() {
 
@@ -176,6 +176,10 @@ public class Book {
             throw new InputMismatchException("Tagler virgül ile ayrılarak yazılmalı.");
         }
     }
+    public void setTags(ArrayList tags){
+        this.tags=tags;
+    }
+
 
     public String getImgFilePath() {
         return imgFilePath;
