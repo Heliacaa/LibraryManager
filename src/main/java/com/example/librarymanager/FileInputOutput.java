@@ -1,4 +1,5 @@
 package com.example.librarymanager;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FileInputOutput{
     private String tName;
@@ -19,21 +21,25 @@ public class FileInputOutput{
     private String mode;
     private ArrayList<Book> arrList;
 
-    public FileInputOutput(String tName,File file,String mode,ArrayList<Book>arrList){
+    public File getFile() {
+        return file;
+    }
+
+    public FileInputOutput(String tName, File file, String mode, ArrayList<Book>arrList){
         this.tName=tName;
         this.file=file;
         this.mode=mode;
         this.arrList=arrList;
     }
 
-    public void run(){
+    public void run()throws IOException{
         try  {
             // ObjectMapper oluştur
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.enable(SerializationFeature.INDENT_OUTPUT); // JSON düzenler
 
             // JSON dosyasını oku, dosya yoksa yeni bir dosya oluştur
-            ArrayNode books = objectMapper.createArrayNode();;
+            ArrayNode books = objectMapper.createArrayNode();
 
             // İlk kitabı ekler
             for(Book currBook : arrList){
@@ -96,9 +102,73 @@ public class FileInputOutput{
                 books.add(book);
             }
             objectMapper.writeValue(file, books);
-            System.out.println("Books are already exported.");;
+            System.out.println("Books are already exported.");
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IOException("An error occurred while saving the file");
         }
+    }
+    public void autoPull() throws IOException{
+        try {
+            // JSON dosyasını oku
+            ObjectMapper objectMapper = new ObjectMapper();
+            File file = new File("books.json");
+            JsonNode rootNode = objectMapper.readTree(file);
+
+            // ArrayNode'u al
+            ArrayNode booksArrayNode = (ArrayNode) rootNode;
+
+            // ArrayNode'daki her bir elemanı işle
+            for (JsonNode bookNode : booksArrayNode) {
+                // Her bir kitabı işle
+                processBookNode(bookNode,arrList);
+            }
+        } catch (Exception e) {
+            throw new IOException("An error occurred while reading the file.The file is not there or unreadable.");
+        }
+    }
+    private static void processBookNode(JsonNode bookNode,ArrayList<Book> arrList) {
+        String title = bookNode.get("title").asText();
+        String subtitle = bookNode.get("subtitle").asText();
+
+// Yazarlar dizisini al
+        JsonNode authorsNode = bookNode.get("authors");
+        ArrayList<String> authors = new ArrayList<>();
+        if (authorsNode.isArray()) {
+            for (JsonNode author : authorsNode) {
+                authors.add(author.asText());
+            }
+        }
+
+// Çevirmenler dizisini al
+        JsonNode translatorsNode = bookNode.get("translators");
+        ArrayList<String> translators = new ArrayList<>();
+        if (translatorsNode.isArray()) {
+            for (JsonNode translator : translatorsNode) {
+                translators.add(translator.asText());
+            }
+        }
+
+        String ISBN = bookNode.get("ISBN").asText();
+        String publisher = bookNode.get("publisher").asText();
+        String date = bookNode.get("date").asText();
+        String edition = bookNode.get("edition").asText();
+        String cover = bookNode.get("cover").asText();
+        String language = bookNode.get("language").asText();
+        double rating = bookNode.get("rating").asDouble();
+
+// Etiketler dizisini al
+        JsonNode tagsNode = bookNode.get("tags");
+        ArrayList<String> tags = new ArrayList<>();
+        if (tagsNode.isArray()) {
+            for (JsonNode tag : tagsNode) {
+                tags.add(tag.asText());
+            }
+        }
+
+        String imgFilePath = bookNode.get("imgFilePath").asText();
+
+// Book nesnesini oluştur
+        Book curr = new Book(title, subtitle, authors, translators, ISBN, publisher, date, edition, cover, language, rating, tags, imgFilePath);
+        arrList.add(curr);
     }
 }

@@ -68,14 +68,14 @@ public class HelloApplication extends Application {
         );
         choiceBox.setValue("title");
 
-        Book b1 = new Book("Harry Potter and the Philosopher's Stone", "Subtitle 1", new ArrayList<>(List.of("J.K. Rowling")), new ArrayList<>(List.of("Translator 1")), "9781408855652", "Bloomsbury Publishing", "26 June 1997", "First Edition", "Hardcover", "English", 4.5, new ArrayList<>(List.of("Fantasy", "Magic")),"img1.jpg");
-        Book b2 = new Book("The Hobbit", "Subtitle 2", new ArrayList<>(List.of("J.R.R. Tolkien")), new ArrayList<>(List.of("Translator 2")), "9780547928227", "Houghton Mifflin Harcourt", "21 September 1937", "First Edition", "Paperback", "English", 4.8, new ArrayList<>(List.of("Fantasy")),"img1.jpg");
-        Book b3 = new Book("Pride and Prejudice", "Subtitle 3", new ArrayList<>(List.of("Jane Austen")), new ArrayList<>(), "9780141199078", "Penguin Books", "28 January 1813", "First Edition", "Paperback", "English", 4.2, new ArrayList<>(List.of("Romance")),"img1.jpg");
+        //Book b1 = new Book("Harry Potter and the Philosopher's Stone", "Subtitle 1", new ArrayList<>(List.of("J.K. Rowling")), new ArrayList<>(List.of("Translator 1")), "9781408855652", "Bloomsbury Publishing", "26 June 1997", "First Edition", "Hardcover", "English", 4.5, new ArrayList<>(List.of("Fantasy", "Magic")),"img1.jpg");
+        //Book b2 = new Book("The Hobbit", "Subtitle 2", new ArrayList<>(List.of("J.R.R. Tolkien")), new ArrayList<>(List.of("Translator 2")), "9780547928227", "Houghton Mifflin Harcourt", "21 September 1937", "First Edition", "Paperback", "English", 4.8, new ArrayList<>(List.of("Fantasy")),"img1.jpg");
+        //Book b3 = new Book("Pride and Prejudice", "Subtitle 3", new ArrayList<>(List.of("Jane Austen")), new ArrayList<>(), "9780141199078", "Penguin Books", "28 January 1813", "First Edition", "Paperback", "English", 4.2, new ArrayList<>(List.of("Romance")),"img1.jpg");
         ArrayList<Book> arrList = new ArrayList<>();
 
-        arrList.add(b1);
-        arrList.add(b2);
-        arrList.add(b3);
+        //arrList.add(b1);
+        //arrList.add(b2);
+        //arrList.add(b3);
 
         lib = new Library(arrList);
 
@@ -116,6 +116,14 @@ public class HelloApplication extends Application {
 
         TableColumn<Book, String[]> tagsColumn = new TableColumn<>("Tags");
         tagsColumn.setCellValueFactory(new PropertyValueFactory<>("tags"));
+
+        fileInputOutput = new FileInputOutput("rThread",new File("books.json"),"r",lib.getBookList());
+        try{
+            fileInputOutput.autoPull();
+        }catch (IOException ioEx){
+            showAlert("Warning","Warning", ioEx.getMessage());
+        }
+
 
         tableView.getColumns().addAll(titleColumn,subTitleColumn,authorsColumn,translatorsColumn,ISBNColumn,publisherColumn,dateColumn,editionColumn,coverColumn,languageColumn,ratingColumn,tagsColumn);
         for(Book i : lib.getBookList()){
@@ -230,7 +238,20 @@ public class HelloApplication extends Application {
             if (selectedBook != null) {
                 openEditBookWindow(selectedBook);
             } else {
-                // Handle case where no book is selected
+                // Handle case where no book is selected.
+            }
+        });
+
+        stage.setOnCloseRequest(e->{
+            fileInputOutput= new FileInputOutput("autoSave",new File("books.json"),"w",lib.getBookList());
+            try {
+                fileInputOutput.run();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText("The file was automatically saved to: "+fileInputOutput.getFile().toString());
+                alert.initOwner(stage);
+                alert.showAndWait();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
             }
         });
 
