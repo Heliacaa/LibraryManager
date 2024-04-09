@@ -34,14 +34,14 @@ public class FileInputOutput{
 
     public void run()throws IOException{
         try  {
-            // ObjectMapper oluştur
+
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.enable(SerializationFeature.INDENT_OUTPUT); // JSON düzenler
 
-            // JSON dosyasını oku, dosya yoksa yeni bir dosya oluştur
+
             ArrayNode books = objectMapper.createArrayNode();
 
-            // İlk kitabı ekler
+
             for(Book currBook : arrList){
                 ObjectNode book = objectMapper.createObjectNode();
                 for(String a : Book.specs) {
@@ -109,17 +109,17 @@ public class FileInputOutput{
     }
     public void autoPull() throws IOException{
         try {
-            // JSON dosyasını oku
+            // read JSON file
             ObjectMapper objectMapper = new ObjectMapper();
             File file = new File("books.json");
             JsonNode rootNode = objectMapper.readTree(file);
 
-            // ArrayNode'u al
+            //get ArrayNode
             ArrayNode booksArrayNode = (ArrayNode) rootNode;
 
-            // ArrayNode'daki her bir elemanı işle
+            // Process each element in the ArrayNode
             for (JsonNode bookNode : booksArrayNode) {
-                // Her bir kitabı işle
+                // Process each book
                 processBookNode(bookNode,arrList);
             }
         } catch (Exception e) {
@@ -130,7 +130,7 @@ public class FileInputOutput{
         String title = bookNode.get("title").asText();
         String subtitle = bookNode.get("subtitle").asText();
 
-// Yazarlar dizisini al
+        // Get the authors arraylist
         JsonNode authorsNode = bookNode.get("authors");
         ArrayList<String> authors = new ArrayList<>();
         if (authorsNode.isArray()) {
@@ -139,7 +139,7 @@ public class FileInputOutput{
             }
         }
 
-// Çevirmenler dizisini al
+        // Get the translators arrayList
         JsonNode translatorsNode = bookNode.get("translators");
         ArrayList<String> translators = new ArrayList<>();
         if (translatorsNode.isArray()) {
@@ -156,7 +156,7 @@ public class FileInputOutput{
         String language = bookNode.get("language").asText();
         double rating = bookNode.get("rating").asDouble();
 
-// Etiketler dizisini al
+        // Get the tags arrayList
         JsonNode tagsNode = bookNode.get("tags");
         ArrayList<String> tags = new ArrayList<>();
         if (tagsNode.isArray()) {
@@ -167,7 +167,7 @@ public class FileInputOutput{
 
         String imgFilePath = bookNode.get("imgFilePath").asText();
 
-// Book nesnesini oluştur
+        // Create book object.
         Book curr = new Book(title, subtitle, authors, translators, ISBN, publisher, date, edition, cover, language, rating, tags, imgFilePath);
         arrList.add(curr);
     }

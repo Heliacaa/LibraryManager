@@ -246,10 +246,7 @@ public class HelloApplication extends Application {
             fileInputOutput= new FileInputOutput("autoSave",new File("books.json"),"w",lib.getBookList());
             try {
                 fileInputOutput.run();
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("The file was automatically saved to: "+fileInputOutput.getFile().toString());
-                alert.initOwner(stage);
-                alert.showAndWait();
+                showAlert("Information","Information","The file was automatically saved to: "+fileInputOutput.getFile().getAbsolutePath());
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -297,8 +294,8 @@ public class HelloApplication extends Application {
         // Create labels for text fields
         Label titleLabel = new Label("Title:");
         Label subtitleLabel = new Label("Subtitle:");
-        Label authorlabel = new Label("Author:");
-        Label translatorlabel = new Label("Translator:");
+        Label authorlabel = new Label("Authors:");
+        Label translatorlabel = new Label("Translators:");
         Label ISBNLabel = new Label("ISBN:");
         Label publisherLabel = new Label("Publisher:");
         Label dateLabel = new Label("Date:");
@@ -759,8 +756,8 @@ public class HelloApplication extends Application {
         // Create labels for text fields
         Label titleLabel = new Label("Title:");
         Label subtitleLabel = new Label("Subtitle:");
-        Label authorLabel = new Label("Author:");
-        Label translatorLabel = new Label("Translator:");
+        Label authorLabel = new Label("Authors:");
+        Label translatorLabel = new Label("Translators:");
         Label ISBNLabel = new Label("ISBN:");
         Label publisherLabel = new Label("Publisher:");
         Label dateLabel = new Label("Date:");

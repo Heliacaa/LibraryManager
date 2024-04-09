@@ -62,7 +62,7 @@ public class Book {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title) throws IllegalArgumentException{
         try {
             if (title == null || title.isBlank()) {
                 throw new IllegalArgumentException("Title cannot be null.");
@@ -77,7 +77,7 @@ public class Book {
         return subtitle;
     }
 
-    public void setSubtitle(String subtitle) {
+    public void setSubtitle(String subtitle) throws IllegalArgumentException {
         try {
             if (subtitle == null||subtitle.isBlank()) {
                 throw new IllegalArgumentException("Subtitle information cannot be null.");
@@ -92,16 +92,16 @@ public class Book {
         return authors;
     }
 
-    public void setAuthors(String authors) {
+    public void setAuthors(String authors) throws IllegalArgumentException,InputMismatchException{
         try {
             if (authors == null || authors.isBlank()) {
                 throw new IllegalArgumentException("Authors information cannot be null. ");
             }
 
-            // Virgül ile ayrılan yazarları parçala
+            // Split authors separated by commas
             String[] authorArray = authors.split(",");
 
-            // Yazarlar listesini oluştur
+            // Create authors list
             this.authors = new ArrayList<>(Arrays.asList(authorArray));
         } catch (IllegalArgumentException e) {
             throw e;
@@ -118,16 +118,16 @@ public class Book {
         return translators;
     }
 
-    public void setTranslators(String translators) {
+    public void setTranslators(String translators) throws IllegalArgumentException,InputMismatchException {
         try {
             if (translators == null || translators.isBlank()) {
                 throw new IllegalArgumentException("Translator information cannot be null.");
             }
 
-            // Virgül ile ayrılan çevirmenleri parçala
+            // Split translators separated by commas
             String[] translatorArray = translators.split(",");
 
-            // Çevirmenler listesini oluştur
+            // Create the translators list
             this.translators = new ArrayList<>(Arrays.asList(translatorArray));
         } catch (IllegalArgumentException e) {
             throw e;
@@ -144,26 +144,24 @@ public class Book {
         return ISBN;
     }
 
-    public void setISBN(String ISBN) {
+    public void setISBN(String ISBN) throws IllegalArgumentException{
         try {
             if (ISBN == null || ISBN.isBlank()) {
                 throw new IllegalArgumentException("ISBN information cannot be null.");
             }
 
-            // ISBN numarasının uzunluğunu kontrol et
+            // Check the length of the ISBN number
             if (ISBN.length() != 10 && ISBN.length() != 13) {
                 throw new IllegalArgumentException("ISBN number should be 10 or 13 digits.");
             }
 
-            // ISBN numarasının sadece rakam veya son karakterinde 'X' olup olmadığını kontrol et
+            // Check if the ISBN number has only digits or 'X' in the last character
             for (int i = 0; i < ISBN.length(); i++) {
                 char c = ISBN.charAt(i);
                 if (!Character.isDigit(c) && (i != ISBN.length() - 1 || (c != 'X' && c != 'x'))) {
                     throw new IllegalArgumentException("ISBN number must consist numbers only (The Last character can be 'X').");
                 }
             }
-
-            // Buraya kadar bir hata yoksa, ISBN numarasını atayabiliriz
             this.ISBN = ISBN;
         } catch (IllegalArgumentException e) {
             throw e;
@@ -174,12 +172,11 @@ public class Book {
         return publisher;
     }
 
-    public void setPublisher(String publisher) {
+    public void setPublisher(String publisher) throws IllegalArgumentException{
         try {
             if (publisher == null || publisher.isBlank()) {
                 throw new IllegalArgumentException("Publisher information cannot be null.");
             }
-            // Buraya kadar bir hata yoksa, yayınevi bilgisini atayabiliriz
             this.publisher = publisher;
         } catch (IllegalArgumentException e) {
             throw e;
@@ -198,20 +195,17 @@ public class Book {
         return edition;
     }
 
-    public void setEdition(String edition) {
+    public void setEdition(String edition) throws IllegalArgumentException{
         try {
             if (edition == null||edition.isBlank()) {
                 throw new IllegalArgumentException("Edition information cannot be null.");
             }
-
-            // Edition değerinin sadece rakamlardan oluştuğunu kontrol et
+            // Check that the Edition value consists of numbers only
             for (char c : edition.toCharArray()) {
                 if (!Character.isDigit(c)) {
                     throw new IllegalArgumentException("Edition information must consist only numbers.");
                 }
             }
-
-            // Buraya kadar herhangi bir hata olmadığına göre, edition değerini atayabiliriz
             this.edition = edition;
         } catch (IllegalArgumentException e) {
             throw e;
@@ -222,7 +216,7 @@ public class Book {
         return cover;
     }
 
-    public void setCover(String cover) {
+    public void setCover(String cover) throws IllegalArgumentException{
         try {
             if (cover == null || cover.isBlank()) {
                 throw new IllegalArgumentException("Cover information cannot be null.");
@@ -242,7 +236,7 @@ public class Book {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage(String language) throws IllegalArgumentException{
         try {
             if (language == null||language.isBlank()) {
                 throw new IllegalArgumentException("Language information cannot be null.");
@@ -262,7 +256,7 @@ public class Book {
         return rating;
     }
 
-    public void setRating(String rating) throws NumberFormatException {
+    public void setRating(String rating) throws IllegalArgumentException {
         try {
             double parsedRating = Double.parseDouble(rating);
             if (parsedRating < 0 || parsedRating > 10.0) {
@@ -309,7 +303,7 @@ public class Book {
                 this.imgFilePath = imgFilePath;
             }
         } catch (Exception e) {
-            // Hata durumunda gerekirse burada bir işlem yapabilirsiniz.
+            // In case of error, you can take action here if necessary.
             e.printStackTrace();
         }
     }
