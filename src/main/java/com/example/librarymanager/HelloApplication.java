@@ -323,6 +323,7 @@ public class HelloApplication extends Application {
 
         DatePicker datePicker = new DatePicker();
         datePicker.setValue(LocalDate.now());
+        datePicker.setEditable(false);
 
         addBookLayout.add(titleLabel, 0, 0);
         addBookLayout.add(titleField, 1, 0);
@@ -781,6 +782,7 @@ public class HelloApplication extends Application {
 
         DatePicker datePicker = new DatePicker();
         datePicker.setValue(LocalDate.now());
+        datePicker.setEditable(false);
 
         Button selectTagsButton = new Button("Select Tags");
         ArrayList<String> tags = new ArrayList<>();
