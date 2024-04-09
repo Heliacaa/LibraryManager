@@ -11,7 +11,7 @@
   "language" : "asdasdsa",
   "rating" : 3.0,
   "tags" : [ "Prayer books", "Religion, Spirituality & New Age" ],
-  "imgFilePath" : "noPic.jpg"
+  "imgFilePath" : "file:/C:/Users/mertk/Desktop/Project%20Images/german.jpeg.jpg"
 }, {
   "title" : "asdasdas",
   "subtitle" : "asdasdas",
@@ -25,5 +25,5 @@
   "language" : "asdasdas",
   "rating" : 10.0,
   "tags" : [ "Children's", "Comics", "Cookbooks", "Prayer books" ],
-  "imgFilePath" : "noPic.jpg"
+  "imgFilePath" : "file:/C:/Users/mertk/Desktop/Project%20Images/Stephen_King_O_kapak.jpg"
 } ]

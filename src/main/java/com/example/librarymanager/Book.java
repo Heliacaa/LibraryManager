@@ -1,5 +1,9 @@
 package com.example.librarymanager;
 import java.io.File;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InputMismatchException;
@@ -299,12 +303,31 @@ public class Book {
         try {
             if (imgFilePath == null) {
                 this.imgFilePath = "noPic.jpg";
-            } else {
-                this.imgFilePath = imgFilePath;
+            }else if(imgFilePath.equals("noPic.jpg")) {
+                this.imgFilePath = "noPic.jpg";
+            }
+            else {
+                try {
+                    // Create the URI of the file
+                    URI dosyaURI = URI.create(imgFilePath);
+
+                    //Create path using URI
+                    Path dosyaYoluPath = Paths.get(dosyaURI);
+
+                    // Check if the file exists
+                    if (Files.exists(dosyaYoluPath)) {
+                        this.imgFilePath = imgFilePath;
+                    } else {
+                        this.imgFilePath = "noPic.jpg";
+                    }
+                } catch (Exception e) {;
+                    //Set a default path
+                    this.imgFilePath = "noPic.jpg";
+                }
             }
         } catch (Exception e) {
             // In case of error, you can take action here if necessary.
-            e.printStackTrace();
+            this.imgFilePath = "noPic.jpg";
         }
     }
 

@@ -47,42 +47,42 @@ public class FileInputOutput{
                 for(String a : Book.specs) {
                     switch(a){
                         case "title":
-                            book.put(a,currBook.getTitle());
+                            book.put(a,currBook.getTitle().trim());
                             break;
                         case "subtitle":
-                            book.put(a,currBook.getSubtitle());
+                            book.put(a,currBook.getSubtitle().trim());
                             break;
                         case "authors":
                             ArrayNode arrNode = objectMapper.createArrayNode();
                             for(String curr : currBook.getAuthors()){
-                                arrNode.add(curr);
+                                arrNode.add(curr.trim());
                             }
                             book.put(a,arrNode);
                             break;
                         case "translators":
                             ArrayNode arrNodet = objectMapper.createArrayNode();
                             for(String curr : currBook.getTranslators()){
-                                arrNodet.add(curr);
+                                arrNodet.add(curr.trim());
                             }
                             book.put(a,arrNodet);
                             break;
                         case "ISBN":
-                            book.put(a,currBook.getISBN());
+                            book.put(a,currBook.getISBN().trim());
                             break;
                         case "publisher":
-                            book.put(a,currBook.getPublisher());
+                            book.put(a,currBook.getPublisher().trim());
                             break;
                         case "date":
-                            book.put(a,currBook.getDate());
+                            book.put(a,currBook.getDate().trim());
                             break;
                         case "edition":
-                            book.put(a,currBook.getEdition());
+                            book.put(a,currBook.getEdition().trim());
                             break;
                         case "cover":
-                            book.put(a,currBook.getCover());
+                            book.put(a,currBook.getCover().trim());
                             break;
                         case "language":
-                            book.put(a,currBook.getLanguage());
+                            book.put(a,currBook.getLanguage().trim());
                             break;
                         case "rating":
                             book.put(a,currBook.getRating());
@@ -90,12 +90,12 @@ public class FileInputOutput{
                         case "tags":
                             ArrayNode arrNodeTags = objectMapper.createArrayNode();
                             for(String curr : currBook.getTags()){
-                                arrNodeTags.add(curr);
+                                arrNodeTags.add(curr.trim());
                             }
                             book.put(a,arrNodeTags);
                             break;
                         case "imgFilePath":
-                            book.put(a,currBook.getImgFilePath());
+                            book.put(a,currBook.getImgFilePath().trim());
                             break;
                     }
                 }
