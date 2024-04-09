@@ -753,7 +753,7 @@ public class HelloApplication extends Application {
         // Create text fields for book information
         TextField titleField = new TextField(bookToEdit.getTitle());
         TextField subtitleField = new TextField(bookToEdit.getSubtitle());
-        TextField authorField = new TextField(bookToEdit.getAuthors().getFirst());
+        TextField authorField = new TextField(String.join(", ", bookToEdit.getAuthors()));
         TextField translatorField = new TextField(String.join(", ", bookToEdit.getTranslators())); // Assuming translator is not editable in this scenario
         TextField ISBNField = new TextField(bookToEdit.getISBN());
         TextField publisherField = new TextField(bookToEdit.getPublisher());

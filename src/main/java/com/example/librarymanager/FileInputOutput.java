@@ -61,7 +61,7 @@ public class FileInputOutput{
                             break;
                         case "translators":
                             ArrayNode arrNodet = objectMapper.createArrayNode();
-                            for(String curr : currBook.getAuthors()){
+                            for(String curr : currBook.getTranslators()){
                                 arrNodet.add(curr);
                             }
                             book.put(a,arrNodet);
@@ -89,7 +89,7 @@ public class FileInputOutput{
                             break;
                         case "tags":
                             ArrayNode arrNodeTags = objectMapper.createArrayNode();
-                            for(String curr : currBook.getAuthors()){
+                            for(String curr : currBook.getTags()){
                                 arrNodeTags.add(curr);
                             }
                             book.put(a,arrNodeTags);

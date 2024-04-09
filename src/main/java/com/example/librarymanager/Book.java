@@ -297,7 +297,7 @@ public class Book {
 
     public void setImgFilePath(String imgFilePath) {
         try {
-            if (imgFilePath == null) {
+            if (imgFilePath == null || !new File(imgFilePath).exists()) {
                 this.imgFilePath = "noPic.jpg";
             } else {
                 this.imgFilePath = imgFilePath;

@@ -1,1 +1,29 @@
-[ ]
+[ {
+  "title" : "asdasdsa",
+  "subtitle" : "dasdasdas",
+  "authors" : [ "J.R.R. Tolkien", "H.G. Wells" ],
+  "translators" : [ "Constance", "Gregory Rabassa" ],
+  "ISBN" : "1234567891",
+  "publisher" : "asdasdas",
+  "date" : "09/04/2024",
+  "edition" : "12",
+  "cover" : "asdasdas",
+  "language" : "asdasdsa",
+  "rating" : 3.0,
+  "tags" : [ "Prayer books", "Religion, Spirituality & New Age" ],
+  "imgFilePath" : "noPic.jpg"
+}, {
+  "title" : "asdasdas",
+  "subtitle" : "asdasdas",
+  "authors" : [ "J.R.R. Tolkien", "  H.G. Wells" ],
+  "translators" : [ "Constance", "  Gregory Rabassa" ],
+  "ISBN" : "1234567891",
+  "publisher" : "asdasdas",
+  "date" : "09/04/2024",
+  "edition" : "11",
+  "cover" : "asdasdas",
+  "language" : "asdasdas",
+  "rating" : 10.0,
+  "tags" : [ "Children's", "Comics", "Cookbooks", "Prayer books" ],
+  "imgFilePath" : "noPic.jpg"
+} ]
