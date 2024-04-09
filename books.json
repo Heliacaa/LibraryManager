@@ -15,8 +15,8 @@
 }, {
   "title" : "asdasdas",
   "subtitle" : "asdasdas",
-  "authors" : [ "J.R.R. Tolkien", "  H.G. Wells" ],
-  "translators" : [ "Constance", "  Gregory Rabassa" ],
+  "authors" : [ "J.R.R. Tolkien", "H.G. Wells" ],
+  "translators" : [ "Constance", "Gregory Rabassa" ],
   "ISBN" : "1234567891",
   "publisher" : "asdasdas",
   "date" : "09/04/2024",

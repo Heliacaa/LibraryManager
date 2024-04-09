@@ -127,15 +127,15 @@ public class FileInputOutput{
         }
     }
     private static void processBookNode(JsonNode bookNode,ArrayList<Book> arrList) {
-        String title = bookNode.get("title").asText();
-        String subtitle = bookNode.get("subtitle").asText();
+        String title = bookNode.get("title").asText().trim();
+        String subtitle = bookNode.get("subtitle").asText().trim();
 
         // Get the authors arraylist
         JsonNode authorsNode = bookNode.get("authors");
         ArrayList<String> authors = new ArrayList<>();
         if (authorsNode.isArray()) {
             for (JsonNode author : authorsNode) {
-                authors.add(author.asText());
+                authors.add(author.asText().trim());
             }
         }
 
@@ -144,16 +144,16 @@ public class FileInputOutput{
         ArrayList<String> translators = new ArrayList<>();
         if (translatorsNode.isArray()) {
             for (JsonNode translator : translatorsNode) {
-                translators.add(translator.asText());
+                translators.add(translator.asText().trim());
             }
         }
 
-        String ISBN = bookNode.get("ISBN").asText();
-        String publisher = bookNode.get("publisher").asText();
-        String date = bookNode.get("date").asText();
-        String edition = bookNode.get("edition").asText();
-        String cover = bookNode.get("cover").asText();
-        String language = bookNode.get("language").asText();
+        String ISBN = bookNode.get("ISBN").asText().trim();
+        String publisher = bookNode.get("publisher").asText().trim();
+        String date = bookNode.get("date").asText().trim();
+        String edition = bookNode.get("edition").asText().trim();
+        String cover = bookNode.get("cover").asText().trim();
+        String language = bookNode.get("language").asText().trim();
         double rating = bookNode.get("rating").asDouble();
 
         // Get the tags arrayList
@@ -161,11 +161,11 @@ public class FileInputOutput{
         ArrayList<String> tags = new ArrayList<>();
         if (tagsNode.isArray()) {
             for (JsonNode tag : tagsNode) {
-                tags.add(tag.asText());
+                tags.add(tag.asText().trim());
             }
         }
 
-        String imgFilePath = bookNode.get("imgFilePath").asText();
+        String imgFilePath = bookNode.get("imgFilePath").asText().trim();
 
         // Create book object.
         Book curr = new Book(title, subtitle, authors, translators, ISBN, publisher, date, edition, cover, language, rating, tags, imgFilePath);
