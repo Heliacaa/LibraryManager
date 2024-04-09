@@ -279,8 +279,19 @@ public class HelloApplication extends Application {
         // Create text fields for book information
         TextField titleField = new TextField();
         TextField subtitleField = new TextField();
-        TextField authorField = new TextField();
-        TextField translatorField = new TextField();
+        TextField authorField = new TextField("J.R.R. Tolkien,H.G. Wells");
+        authorField.setOnMouseClicked(e -> {
+            authorField.clear();
+            //Remove click event tracker
+            authorField.setOnMouseClicked(null);
+        });
+        TextField translatorField = new TextField("Constance,Gregory Rabassa");
+        translatorField.setOnMouseClicked(e -> {
+            translatorField.clear();
+            //Remove click event tracker
+            translatorField.setOnMouseClicked(null);
+        });
+
         TextField ISBNField = new TextField();
         TextField publisherField = new TextField();
         //TextField dateField = new TextField();
