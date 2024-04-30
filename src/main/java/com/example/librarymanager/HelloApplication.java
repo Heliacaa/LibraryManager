@@ -176,6 +176,7 @@ public class HelloApplication extends Application {
 
         Menu mFile = new Menu("File");
         Menu mAbout = new Menu("Help");
+        mItemAbout.setOnAction(event -> showHelpWindow());
 
         MenuBar mBar = new MenuBar();
 
@@ -908,6 +909,42 @@ public class HelloApplication extends Application {
         dialogPane.setPrefHeight(200); // Set preferred height
 
         alert.showAndWait();
+    }
+
+    public void showHelpWindow() {
+        // Create a new stage for the help window
+        Stage helpStage = new Stage();
+        helpStage.setTitle("Help");
+        helpStage.initModality(Modality.APPLICATION_MODAL);
+
+        //make the help window buttons 2 per line like addbooklayout
+
+        // Create layout for help window
+        VBox helpLayout = new VBox();
+        helpLayout.setAlignment(Pos.CENTER);
+        helpLayout.setSpacing(10);
+        helpLayout.setPadding(new Insets(20));
+        Label label = new Label("You can access the menu by clicking the 'File' or 'Help' buttons at the top of the screen. The 'File' menu allows you to create a new library, import and export books, and exit the application. The 'Help' menu allows you to access information about the application.");
+        Label addbook = new Label("You can add a book to the library by clicking the 'Add' button on the main screen. You will be prompted to enter information about the book, such as title, author, ISBN, etc. Click the 'Add' button on the add book window to add the book to the library.");
+        Label editbook = new Label("You can edit a book in the library by selecting the book in the table and clicking the 'Edit' button on the main screen. You will be prompted to edit the information about the book. Click the 'Save' button on the edit book window to save the changes.");
+        Label deletebook = new Label("You can delete a book from the library by selecting the book in the table and clicking the 'Delete' button on the main screen. The book will be permanently removed from the library.");
+        Label searchbook = new Label("You can search for a book in the library by entering a search term in the search box on the main screen and selecting a search criteria from the dropdown menu. Click the 'Search' button to display the search results in the table.");
+        Label resetsearch = new Label("You can reset the search results by clicking the 'Reset Search' button on the main screen. This will display all the books in the library in the table.");
+
+        label.setWrapText(true);
+        addbook.setWrapText(true);
+        editbook.setWrapText(true);
+        deletebook.setWrapText(true);
+        searchbook.setWrapText(true);
+        resetsearch.setWrapText(true);
+        helpLayout.getChildren().addAll(label,addbook,editbook,deletebook,searchbook,resetsearch);
+
+        // Set scene for help window
+        Scene helpScene = new Scene(helpLayout, 600, 400);
+        helpStage.setScene(helpScene);
+
+        // Show help window
+        helpStage.show();
     }
     public static void main(String[] args) {
         launch();
