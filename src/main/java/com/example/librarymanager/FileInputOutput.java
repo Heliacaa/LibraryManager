@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FileInputOutput{
@@ -20,6 +21,39 @@ public class FileInputOutput{
     //for 1 write for 2 read;
     private String mode;
     private ArrayList<Book> arrList;
+    private static List<String> tagsList = new ArrayList<>(Arrays.asList(
+            "Action and Adventure",
+            "Anthology",
+            "Art",
+            "Autobiographies",
+            "Biographies",
+            "Children's",
+            "Comics",
+            "Cookbooks",
+            "Diaries",
+            "Dictionaries",
+            "Drama",
+            "Encyclopedias",
+            "Fantasy",
+            "Guide",
+            "Health",
+            "History",
+            "Horror",
+            "Journals",
+            "Math",
+            "Mystery",
+            "Poetry",
+            "Prayer books",
+            "Religion, Spirituality & New Age",
+            "Romance",
+            "Satire",
+            "Science",
+            "Science Fiction",
+            "Self-help",
+            "Series",
+            "Travel",
+            "Trilogy"
+    ));
 
     public File getFile() {
         return file;
@@ -127,48 +161,171 @@ public class FileInputOutput{
         }
     }
     private static void processBookNode(JsonNode bookNode,ArrayList<Book> arrList) {
-        String title = bookNode.get("title").asText().trim();
-        String subtitle = bookNode.get("subtitle").asText().trim();
+        String title;
+        try{
+            title = bookNode.get("title").asText().trim();
+            Validation.checkTitle(title);
+        }catch(IllegalArgumentException | NullPointerException e){
+            title="NoTitle";
+        }
+
+        String subtitle;
+        try {
+            subtitle = bookNode.get("subtitle").asText().trim();
+            Validation.checkSubtitle(subtitle);
+        } catch (IllegalArgumentException | NullPointerException e) {
+            subtitle = "NoSubtitle";
+        }
 
         // Get the authors arraylist
-        JsonNode authorsNode = bookNode.get("authors");
-        ArrayList<String> authors = new ArrayList<>();
-        if (authorsNode.isArray()) {
-            for (JsonNode author : authorsNode) {
-                authors.add(author.asText().trim());
+        ArrayList<String> authors=new ArrayList<>();
+        try{
+            JsonNode authorsNode = bookNode.get("authors");
+            if (authorsNode.isArray()) {
+                for (JsonNode author : authorsNode) {
+                    authors.add(author.asText().trim());
+                }
             }
+        }catch (IllegalArgumentException | NullPointerException e) {
+            authors = new ArrayList<>();
         }
+
 
         // Get the translators arrayList
-        JsonNode translatorsNode = bookNode.get("translators");
         ArrayList<String> translators = new ArrayList<>();
-        if (translatorsNode.isArray()) {
-            for (JsonNode translator : translatorsNode) {
-                translators.add(translator.asText().trim());
+        try{
+            JsonNode translatorsNode = bookNode.get("translators");
+            if (translatorsNode.isArray()) {
+                for (JsonNode translator : translatorsNode) {
+                    translators.add(translator.asText().trim());
+                }
             }
+        }catch (IllegalArgumentException | NullPointerException e) {
+            translators = new ArrayList<>();
         }
 
-        String ISBN = bookNode.get("ISBN").asText().trim();
-        String publisher = bookNode.get("publisher").asText().trim();
-        String date = bookNode.get("date").asText().trim();
-        String edition = bookNode.get("edition").asText().trim();
-        String cover = bookNode.get("cover").asText().trim();
-        String language = bookNode.get("language").asText().trim();
-        double rating = bookNode.get("rating").asDouble();
+
+        // ISBN
+        String ISBN = "1234567890";
+        try {
+            String tempISBN = bookNode.get("ISBN").asText().trim();
+            if (!tempISBN.isEmpty()) {
+                Validation.checkISBN(tempISBN);
+                ISBN = tempISBN;
+            }
+        } catch (IllegalArgumentException | NullPointerException e) {
+            // If the ISBN value is invalid or null, assign "NoISBN"
+        }
+
+// Publisher
+        String publisher = "NoPublisher";
+        try {
+            String tempPublisher = bookNode.get("publisher").asText().trim();
+            if (!tempPublisher.isEmpty()) {
+                Validation.checkPublisher(tempPublisher);
+                publisher = tempPublisher;
+            }
+        } catch (IllegalArgumentException | NullPointerException e) {
+            // If the publisher value is invalid or null, assign "NoPublisher"
+        }
+
+// Date
+        String date = "01/01/2000";
+        try {
+            String tempDate = bookNode.get("date").asText().trim();
+            if (!tempDate.isEmpty()) {
+                Validation.checkDate(tempDate);
+                date = tempDate;
+            }
+        } catch (IllegalArgumentException | NullPointerException e) {
+            // If the date value is invalid or null, assign "NoDate"
+        }
+
+// Edition
+        String edition = "1";
+        try {
+            String tempEdition = bookNode.get("edition").asText().trim();
+            if (!tempEdition.isEmpty()) {
+                Validation.checkEdition(tempEdition);
+                edition = tempEdition;
+            }
+        } catch (IllegalArgumentException | NullPointerException e) {
+            // If the edition value is invalid or null, assign "NoEdition"
+        }
+
+// Cover
+        String cover = "NoCover";
+        try {
+            String tempCover = bookNode.get("cover").asText().trim();
+            if (!tempCover.isEmpty()) {
+                Validation.checkCover(tempCover);
+                cover = tempCover;
+            }
+        } catch (IllegalArgumentException | NullPointerException e) {
+            // If the cover value is invalid or null, assign "NoCover"
+        }
+
+// Language
+        String language = "NoLanguage";
+        try {
+            String tempLanguage = bookNode.get("language").asText().trim();
+            if (!tempLanguage.isEmpty()) {
+                Validation.checkLanguage(tempLanguage);
+                language = tempLanguage;
+            }
+        } catch (IllegalArgumentException | NullPointerException e) {
+            // If the language value is invalid or null, assign "NoLanguage"
+        }
+
+// Rating
+        double rating = 0.0;
+        try {
+            rating = bookNode.get("rating").asDouble();
+            Validation.checkRating(String.valueOf(rating));
+        } catch (IllegalArgumentException | NullPointerException e) {
+            // If the rating value is invalid or null, assign 0.0
+        }
 
         // Get the tags arrayList
-        JsonNode tagsNode = bookNode.get("tags");
         ArrayList<String> tags = new ArrayList<>();
-        if (tagsNode.isArray()) {
-            for (JsonNode tag : tagsNode) {
-                tags.add(tag.asText().trim());
+        try{
+            JsonNode tagsNode = bookNode.get("tags");
+            if (tagsNode.isArray()) {
+                for (JsonNode tag : tagsNode) {
+                    if(tagsList.contains(tag.asText())){
+                        tags.add(tag.asText().trim());
+                    }
+                }
             }
+        }catch (IllegalArgumentException | NullPointerException e) {
+            tags=new ArrayList<>();
         }
-
         String imgFilePath = bookNode.get("imgFilePath").asText().trim();
 
         // Create book object.
         Book curr = new Book(title, subtitle, authors, translators, ISBN, publisher, date, edition, cover, language, rating, tags, imgFilePath);
         arrList.add(curr);
+    }
+    public void importBooks(){
+        try{
+            try {
+                // read JSON file
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode rootNode = objectMapper.readTree(file);
+
+                //get ArrayNode
+                ArrayNode booksArrayNode = (ArrayNode) rootNode;
+
+                // Process each element in the ArrayNode
+                arrList.clear();
+                for (JsonNode bookNode : booksArrayNode) {
+                    // Process each book
+                    processBookNode(bookNode,arrList);
+                }
+            } catch (Exception e) {
+                throw new IOException("An error occurred while reading the file.The file is not there or unreadable.");
+            }
+        }catch(IOException e){
+        }
     }
 }
