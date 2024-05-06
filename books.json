@@ -10,7 +10,7 @@
   "cover" : "Hardcover",
   "language" : "English",
   "rating" : 4.5,
-  "tags" : [ ],
+  "tags" : [ "Classics", "Fiction", "Literature" ],
   "imgFilePath" : "noPic.jpg"
 }, {
   "title" : "To Kill a Mockingbird",
@@ -24,7 +24,7 @@
   "cover" : "Paperback",
   "language" : "English",
   "rating" : 4.8,
-  "tags" : [ ],
+  "tags" : [ "Fiction", "Classics" ],
   "imgFilePath" : "noPic.jpg"
 }, {
   "title" : "1984",
@@ -38,7 +38,7 @@
   "cover" : "Paperback",
   "language" : "English",
   "rating" : 4.7,
-  "tags" : [ ],
+  "tags" : [ "Classics", "Fiction", "Dystopian" ],
   "imgFilePath" : "noPic.jpg"
 }, {
   "title" : "The Catcher in the Rye",
@@ -52,7 +52,7 @@
   "cover" : "Paperback",
   "language" : "English",
   "rating" : 4.2,
-  "tags" : [ ],
+  "tags" : [ "Fiction", "Classics" ],
   "imgFilePath" : "noPic.jpg"
 }, {
   "title" : "The Hobbit",
@@ -66,7 +66,7 @@
   "cover" : "Paperback",
   "language" : "English",
   "rating" : 4.9,
-  "tags" : [ "Fantasy" ],
+  "tags" : [ "Fantasy", "Fiction", "Classics" ],
   "imgFilePath" : "noPic.jpg"
 }, {
   "title" : "The Lord of the Rings",
@@ -80,7 +80,7 @@
   "cover" : "Paperback",
   "language" : "English",
   "rating" : 5.0,
-  "tags" : [ "Fantasy" ],
+  "tags" : [ "Fantasy", "Fiction", "Adventure" ],
   "imgFilePath" : "noPic.jpg"
 }, {
   "title" : "Pride and Prejudice",
@@ -94,7 +94,7 @@
   "cover" : "Paperback",
   "language" : "English",
   "rating" : 4.6,
-  "tags" : [ "Romance" ],
+  "tags" : [ "Classics", "Fiction", "Romance" ],
   "imgFilePath" : "noPic.jpg"
 }, {
   "title" : "The Alchemist",
@@ -108,7 +108,7 @@
   "cover" : "Paperback",
   "language" : "English",
   "rating" : 4.3,
-  "tags" : [ ],
+  "tags" : [ "Fiction", "Philosophy", "Adventure" ],
   "imgFilePath" : "noPic.jpg"
 }, {
   "title" : "Harry Potter and the Philosopher's Stone",
@@ -122,7 +122,7 @@
   "cover" : "Paperback",
   "language" : "English",
   "rating" : 4.7,
-  "tags" : [ "Fantasy", "Children's" ],
+  "tags" : [ "Fantasy", "Fiction", "Children's" ],
   "imgFilePath" : "noPic.jpg"
 }, {
   "title" : "The Da Vinci Code",
@@ -136,6 +136,6 @@
   "cover" : "Paperback",
   "language" : "English",
   "rating" : 4.1,
-  "tags" : [ "Mystery" ],
+  "tags" : [ "Mystery", "Thriller", "Fiction" ],
   "imgFilePath" : "noPic.jpg"
 } ]

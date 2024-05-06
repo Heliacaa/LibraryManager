@@ -38,7 +38,43 @@ public class HelloApplication extends Application {
     private FileInputOutput fileInputOutput;
     private TextField textFieldSearch = new TextField();
     private ChoiceBox<String> choiceBox = new ChoiceBox<>();
+    private static List<String> tagsList = new ArrayList<>(Arrays.asList(
+            "Action and Adventure",
+            "Anthology",
+            "Art",
+            "Autobiographies",
+            "Biographies",
+            "Children's",
+            "Comics",
+            "Cookbooks",
+            "Diaries",
+            "Dictionaries",
+            "Drama",
+            "Encyclopedias",
+            "Fantasy",
+            "Guide",
+            "Health",
+            "History",
+            "Horror",
+            "Journals",
+            "Math",
+            "Mystery",
+            "Poetry",
+            "Prayer books",
+            "Religion, Spirituality & New Age",
+            "Romance",
+            "Satire",
+            "Science",
+            "Science Fiction",
+            "Self-help",
+            "Series",
+            "Travel",
+            "Trilogy"
+    ));
 
+    public static List<String> getTagsList() {
+        return tagsList;
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -484,41 +520,6 @@ public class HelloApplication extends Application {
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
 
-// Mock tags list
-        List<String> tagsList = new ArrayList<>(Arrays.asList(
-                "Action and Adventure",
-                "Anthology",
-                "Art",
-                "Autobiographies",
-                "Biographies",
-                "Children's",
-                "Comics",
-                "Cookbooks",
-                "Diaries",
-                "Dictionaries",
-                "Drama",
-                "Encyclopedias",
-                "Fantasy",
-                "Guide",
-                "Health",
-                "History",
-                "Horror",
-                "Journals",
-                "Math",
-                "Mystery",
-                "Poetry",
-                "Prayer books",
-                "Religion, Spirituality & New Age",
-                "Romance",
-                "Satire",
-                "Science",
-                "Science Fiction",
-                "Self-help",
-                "Series",
-                "Travel",
-                "Trilogy"
-        ));
-
 // Create a flow pane to hold the checkboxes
         FlowPane checkBoxPane = new FlowPane();
         checkBoxPane.setHgap(10);
@@ -576,41 +577,6 @@ public class HelloApplication extends Application {
         root.setHgap(10);
         root.setVgap(10);
         root.setPadding(new Insets(20));
-
-// Mock tags list
-        List<String> tagsList = new ArrayList<>(Arrays.asList(
-                "Action and Adventure",
-                "Anthology",
-                "Art",
-                "Autobiographies",
-                "Biographies",
-                "Children's",
-                "Comics",
-                "Cookbooks",
-                "Diaries",
-                "Dictionaries",
-                "Drama",
-                "Encyclopedias",
-                "Fantasy",
-                "Guide",
-                "Health",
-                "History",
-                "Horror",
-                "Journals",
-                "Math",
-                "Mystery",
-                "Poetry",
-                "Prayer books",
-                "Religion, Spirituality & New Age",
-                "Romance",
-                "Satire",
-                "Science",
-                "Science Fiction",
-                "Self-help",
-                "Series",
-                "Travel",
-                "Trilogy"
-        ));
 
 // Add checkboxes for each tag to the grid pane
         int col = 0;

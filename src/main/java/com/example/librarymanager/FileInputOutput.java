@@ -21,39 +21,6 @@ public class FileInputOutput{
     //for 1 write for 2 read;
     private String mode;
     private ArrayList<Book> arrList;
-    private static List<String> tagsList = new ArrayList<>(Arrays.asList(
-            "Action and Adventure",
-            "Anthology",
-            "Art",
-            "Autobiographies",
-            "Biographies",
-            "Children's",
-            "Comics",
-            "Cookbooks",
-            "Diaries",
-            "Dictionaries",
-            "Drama",
-            "Encyclopedias",
-            "Fantasy",
-            "Guide",
-            "Health",
-            "History",
-            "Horror",
-            "Journals",
-            "Math",
-            "Mystery",
-            "Poetry",
-            "Prayer books",
-            "Religion, Spirituality & New Age",
-            "Romance",
-            "Satire",
-            "Science",
-            "Science Fiction",
-            "Self-help",
-            "Series",
-            "Travel",
-            "Trilogy"
-    ));
 
     public File getFile() {
         return file;
@@ -292,7 +259,10 @@ public class FileInputOutput{
             JsonNode tagsNode = bookNode.get("tags");
             if (tagsNode.isArray()) {
                 for (JsonNode tag : tagsNode) {
-                    if(tagsList.contains(tag.asText())){
+                    if(!HelloApplication.getTagsList().contains(tag.asText())){
+                        HelloApplication.getTagsList().add(tag.asText());
+                    }
+                    if(HelloApplication.getTagsList().contains(tag.asText())){
                         tags.add(tag.asText().trim());
                     }
                 }
