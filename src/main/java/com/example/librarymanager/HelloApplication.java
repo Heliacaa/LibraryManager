@@ -1053,6 +1053,7 @@ public class HelloApplication extends Application {
         Label deletebook = new Label("You can delete a book from the library by selecting the book in the table and clicking the 'Delete' button on the main screen. The book will be permanently removed from the library.");
         Label searchbook = new Label("You can search for a book in the library by entering a search term in the search box on the main screen and selecting a search criteria from the dropdown menu. Click the 'Search' button to display the search results in the table.");
         Label resetsearch = new Label("You can reset the search results by clicking the 'Reset Search' button on the main screen. This will display all the books in the library in the table.");
+        Label file = new Label("The File tab allows the user to perform some operations with JSON files. When you click on the File tab, you will see three options. These are the New, Import and Export options. Clicking the New option resets the library and deletes the JSON files containing the data of the books. The Import option allows you to move the JSON files you already have to the library system, and the Export option allows you to include the book whose data you have entered in the system by transferring it to the JSON file. ");
 
         label.setWrapText(true);
         addbook.setWrapText(true);
@@ -1060,6 +1061,7 @@ public class HelloApplication extends Application {
         deletebook.setWrapText(true);
         searchbook.setWrapText(true);
         resetsearch.setWrapText(true);
+        file.setWrapText(true);
         helpLayout.getChildren().addAll(label,addbook,editbook,deletebook,searchbook,resetsearch);
 
         // Set scene for help window
