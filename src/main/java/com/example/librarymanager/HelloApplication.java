@@ -26,10 +26,7 @@ import java.net.MalformedURLException;
 import java.nio.file.NoSuchFileException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.InputMismatchException;
-import java.util.List;
+import java.util.*;
 
 
 public class HelloApplication extends Application {
@@ -166,7 +163,7 @@ public class HelloApplication extends Application {
 
         Button buttonSearch = new Button("Search");
         try{
-            buttonSearch.setOnAction(e->search());
+            buttonSearch.setOnAction(e->search(stage));
         }catch(NumberFormatException e){
 
         }
@@ -196,7 +193,7 @@ public class HelloApplication extends Application {
 
         HBox.setHgrow(textFieldSearch, Priority.ALWAYS);
         VBox popupContentVBox = new VBox();
-        popupContentVBox.setPrefWidth(200);
+        popupContentVBox.setPrefWidth(250);
         popupContentVBox.setPrefHeight(400);
 
         popupContentVBox.setAlignment(Pos.TOP_CENTER);
@@ -223,8 +220,20 @@ public class HelloApplication extends Application {
                 imageView.setFitWidth(200);
                 imageView.setFitHeight(150);
                 imageView.setPreserveRatio(true);
-                Label label = new Label("\nTitle: " + newValue.getTitle() + "\nSubititle: " + newValue.getSubtitle()+"\nAuthors: " + newValue.getAuthors().toString() + "\nTranslators: " + newValue.getTranslators().toString()+"\nISBN: " + newValue.getISBN() + "\nPublisher: " + newValue.getPublisher()+ "\nDate: " + newValue.getDate()+ "\nEdition: " + newValue.getEdition()+ "\nCover: " + newValue.getCover()+ "\nLanguage: " + newValue.getLanguage()+ "\nRating: " + newValue.getRating()+ "\nTags: " + newValue.getTags()+"\n\n");
-                popupContentInformationVBox.getChildren().addAll(label,popupContentButtonHBox);
+                Label titleLabel = new Label("Title: " + newValue.getTitle());
+                Label subtitleLabel = new Label("Subtitle: " + newValue.getSubtitle());
+                Label authorsLabel = new Label("Authors: " + newValue.getAuthors().toString());
+                Label translatorsLabel = new Label("Translators: " + newValue.getTranslators().toString());
+                Label isbnLabel = new Label("ISBN: " + newValue.getISBN());
+                Label publisherLabel = new Label("Publisher: " + newValue.getPublisher());
+                Label dateLabel = new Label("Date: " + newValue.getDate());
+                Label editionLabel = new Label("Edition: " + newValue.getEdition());
+                Label coverLabel = new Label("Cover: " + newValue.getCover());
+                Label languageLabel = new Label("Language: " + newValue.getLanguage());
+                Label ratingLabel = new Label("Rating: " + newValue.getRating());
+                Label tagsLabel = new Label("Tags: " + newValue.getTags().toString() + "\n\n");
+                tagsLabel.setWrapText(true);
+                popupContentInformationVBox.getChildren().addAll(titleLabel,subtitleLabel,authorsLabel,translatorsLabel,isbnLabel,publisherLabel,dateLabel,editionLabel,coverLabel,languageLabel,ratingLabel,tagsLabel,popupContentButtonHBox);
                 popupContentVBox.getChildren().addAll(imageView,popupContentInformationVBox);
             }
             buttonDelete.setOnAction(e->{
@@ -254,7 +263,7 @@ public class HelloApplication extends Application {
             }
         });
 
-        Scene scene = new Scene(mainlayout, 1200, 500);
+        Scene scene = new Scene(mainlayout, 1200, 600);
         stage.setTitle("Library Management System");
         stage.setScene(scene);
         stage.show();
@@ -513,6 +522,7 @@ public class HelloApplication extends Application {
     }
     private void showTagsSelectionWindow(Stage primaryStage,ArrayList<String> tags) {
         // Tags selection window
+        Collections.sort(tagsList);
         Stage tagsStage = new Stage();
         tagsStage.setTitle("Select Tags");
 
@@ -556,18 +566,35 @@ public class HelloApplication extends Application {
             }
             tagsStage.close();
         });
+        Button addTagBtn = new Button("Add New Tag");
+        addTagBtn.setOnAction(e -> {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Add New Tag");
+            dialog.setHeaderText(null);
+            dialog.setContentText("Enter Tag Name:");
+
+            dialog.showAndWait().ifPresent(tagName -> {
+                if (!tagName.trim().isEmpty()) {
+                    tagsList.add(tagName.trim());
+                    tagsStage.close();
+                }
+            });
+        });
 
 // Add confirm button to the bottom of the border pane
-        root.setBottom(confirmButton);
+        HBox hbox = new HBox(8);
+        hbox.getChildren().addAll(confirmButton,addTagBtn);
+        hbox.setAlignment(Pos.CENTER);
+        root.setBottom(hbox);
         BorderPane.setAlignment(confirmButton, Pos.CENTER);
-
-        tagsStage.setScene(new Scene(root, 400, 400));
+        tagsStage.setScene(new Scene(root, 500, 500));
         tagsStage.initOwner(primaryStage);
         tagsStage.show();
 
     }
-    private void showTagsSearchWindow() {
+    private void showTagsSearchWindow(Stage stage) {
         // Tags selection window
+        Collections.sort(tagsList);
         Stage tagsStage = new Stage();
         tagsStage.setTitle("Select Tags to Search");
         ArrayList<String> tags = new ArrayList<>();
@@ -622,12 +649,13 @@ public class HelloApplication extends Application {
         vbox.setPadding(new Insets(10));
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
-        tagsStage.setScene(new Scene(vbox, 400, 400));
+        tagsStage.setScene(new Scene(vbox, 500, 500));
+        tagsStage.initOwner(stage);
         tagsStage.show();
     }
-    public void search(){
+    public void search(Stage stage){
         if(choiceBox.getValue().equals("tags")){
-            showTagsSearchWindow();
+            showTagsSearchWindow(stage);
         }else if(textFieldSearch.getText().isBlank()){
             return;
         }
@@ -669,17 +697,25 @@ public class HelloApplication extends Application {
 
                         // Iterate over all books
                         for (Book book : lib.getBookList()) {
+                            boolean found = false;
                             // Iterate over each author
                             for (String author : authorArray) {
-                                // Check if the author is in the book's authors list
+                                // Check if the current book contains the author
                                 for (String curr : book.getAuthors()) {
-                                    // If the book contains the author, add it to the table view
+                                    // If the book contains the author, set found to true and break
                                     if (curr.trim().equalsIgnoreCase(author.trim())) {
-                                        tableView.getItems().add(book);
-                                        // Break out of the loop since we've found a match
+                                        found = true;
                                         break;
                                     }
                                 }
+                                // If the book contains any of the authors, break the loop
+                                if (found) {
+                                    break;
+                                }
+                            }
+                            // If the book contains any of the authors, add it to the table view
+                            if (found) {
+                                tableView.getItems().add(book);
                             }
                         }
                     } catch (IllegalArgumentException e) {
@@ -697,17 +733,25 @@ public class HelloApplication extends Application {
 
                         // Iterate over all books
                         for (Book book : lib.getBookList()) {
+                            boolean found = false;
                             // Iterate over each translator
                             for (String translator : translatorArray) {
-                                // Check if the translator is in the book's translators list
+                                // Check if the current book contains the translator
                                 for (String curr : book.getTranslators()) {
-                                    // If the book contains the translator, add it to the table view
+                                    // If the book contains the translator, set found to true and break
                                     if (curr.trim().equalsIgnoreCase(translator.trim())) {
-                                        tableView.getItems().add(book);
-                                        // Break out of the loop since we've found a match
+                                        found = true;
                                         break;
                                     }
                                 }
+                                // If the book contains any of the translators, break the loop
+                                if (found) {
+                                    break;
+                                }
+                            }
+                            // If the book contains any of the translators, add it to the table view
+                            if (found) {
+                                tableView.getItems().add(book);
                             }
                         }
                     } catch (IllegalArgumentException e) {
