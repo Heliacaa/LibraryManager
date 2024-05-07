@@ -1048,6 +1048,7 @@ public class HelloApplication extends Application {
         helpLayout.setSpacing(10);
         helpLayout.setPadding(new Insets(20));
         Label welcomeHelpMenu = new Label("Welcome to Help Menu. In this menu you can find general information about the Library Management System interface and how to use the features of the system. ");
+        Label generalInfo2 = new Label("In this interface, the top section features two tabs: Help and File, with the Help tab currently active. Further down, you'll find options for searching, resetting, and adding content, each explained in detail later on. Directly below these options is a section displaying various details about registered books, such as title, author, ISBN, and more. Initially, this list is empty, but it dynamically updates as you add books or conduct searches. When you select a book from the list, its comprehensive details appear in a dark pane alongside its cover photo, providing a convenient way to access and view specific book information.");
         Label generalInfo = new Label("General Information About Layout: In this text, you can find general information of main layout of the interface. The top line of the interface contains Help and File tabs. The Help tab is the tab you are currently on, and information about the File menu is available in the rest of the text. There are a number of options, reset search and add options that allow us to search on a lower line. Detailed information about searching, reset search and add options is available in the rest of the text. In the section below, you can see the title, subtitle, authors, translators, ISBN, Publisher, Date, Edition, Cover, Language, Ratings and Tags data of the books registered in the system. If there is no book saved in the system, the list appears empty. If you save a book using the Add option (detailed information about the use of the add option is available in the rest of the text), the data will appear in the list. This list also shows the results of your search among the books registered in the system. After you perform the search (information about the search process is available later in the text), books with data that match your search will be listed in this list. When you click on any line on the list, the book with data on that line appears in the dark pane next to the list, with all the data about that book compiled. In this dark section,there is also a photo of the book cover that is not listed. ");
         Label addbook = new Label("Book Adding:  You can add a book to the library by clicking the 'Add' button on the main screen. You will be prompted to enter information about the book, such as title, author, ISBN, etc. Click the 'Add' button on the add book window to add the book to the library.");
         Label editbook = new Label("Book Editing:  You can edit a book in the library by selecting the book in the table and clicking the 'Edit' button on the main screen. You will be prompted to edit the information about the book. Click the 'Save' button on the edit book window to save the changes.");
@@ -1057,6 +1058,7 @@ public class HelloApplication extends Application {
         Label file = new Label("File tab:  The File tab allows the user to perform some operations with JSON files. When you click on the File tab, you will see three options. These are the New, Import and Export options. Clicking the New option resets the library and deletes the JSON files containing the data of the books. The Import option allows you to move the JSON files you already have to the library system, and the Export option allows you to include the book whose data you have entered in the system by transferring it to the JSON file. ");
 
         welcomeHelpMenu.setWrapText(true);
+        generalInfo2.setWrapText(true);
         generalInfo.setWrapText(true);
         addbook.setWrapText(true);
         editbook.setWrapText(true);
@@ -1064,7 +1066,7 @@ public class HelloApplication extends Application {
         searchbook.setWrapText(true);
         resetsearch.setWrapText(true);
         file.setWrapText(true);
-        helpLayout.getChildren().addAll(welcomeHelpMenu,generalInfo,addbook,editbook,deletebook,searchbook,resetsearch);
+        helpLayout.getChildren().addAll(welcomeHelpMenu,generalInfo2,addbook,editbook,deletebook,searchbook,resetsearch,file);
 
         // Set scene for help window
         Scene helpScene = new Scene(helpLayout, 600, 600);
